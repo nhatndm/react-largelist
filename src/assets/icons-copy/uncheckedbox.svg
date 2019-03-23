@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>Mask</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M57.5000015,2.5013 L2.50000048,2.5013 L2.50000048,57.502446 L57.5000015,57.502446 L57.5000015,2.5013 Z M58.7500015,60.001248 L1.25000048,60.001248 C0.55999998,60.001248 0,59.4424863 0,58.752472 L0,1.25127 C0,0.56126 0.55999998,0 1.25000048,0 L58.7500015,0 C59.4400015,0 60.0000015,0.56126 60.0000015,1.25127 L60.0000015,58.752472 C60.0000015,59.4424863 59.4400015,60.001248 58.7500015,60.001248 Z" id="uncheckedbox"></path>
+    </defs>
+    <g id="05_icons/interface/check-false" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-10.000000, -10.000000)">
+        <g id="🎨Colour" transform="translate(10.000000, 10.000000)">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#uncheckedbox"></use>
+            </mask>
+            <use id="Mask" fill="#000000" xlink:href="#uncheckedbox"></use>
+        </g>
+    </g>
+</svg>

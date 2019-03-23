@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60px" height="45px" viewBox="0 0 60 45" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>Mask</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M22.3322878,44.9919378 C22.0271228,44.9919378 21.7320059,44.8791107 21.5021947,44.6760218 L0.419545677,25.9291647 C-0.0965948945,25.4703297 -0.143060131,24.6805419 0.316568737,24.1640424 C0.773685933,23.6500549 1.56485015,23.602416 2.08099125,24.0612434 L22.211732,41.9619013 L57.8003112,0.437743027 C58.2511525,-0.0887822006 59.0385483,-0.147706594 59.5634763,0.301095123 C60.0871521,0.751149114 60.148686,1.53969218 59.6991044,2.06245308 L23.2816844,44.5544192 C23.0631738,44.8089071 22.7517323,44.9656115 22.4176825,44.9894306 C22.3887977,44.9894306 22.3611726,44.9919378 22.3322878,44.9919378" id="path-1"></path>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="05_icons/interface/tick-mark" transform="translate(-10.000000, -18.000000)">
+            <g id="🎨Colour" transform="translate(10.000000, 18.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="Mask" fill="#000000" xlink:href="#path-1"></use>
+            </g>
+        </g>
+    </g>
+</svg>

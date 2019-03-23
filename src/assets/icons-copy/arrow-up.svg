@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="34px" height="60px" viewBox="0 0 34 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>Mask</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M33.6128041,19.669 C33.3788041,19.892 33.0828041,20.003 32.7868041,20.003 C32.4608041,20.003 32.1358041,19.869 31.8968041,19.604 L18.2148041,4.435 L18.2148041,58.764 C18.2148041,59.454 17.6708041,60.014 17.0008041,60.014 C16.3308041,60.014 15.8248041,59.458 15.8248041,58.766 L15.8248041,4.391 L2.10380413,19.604 C1.64680413,20.11 0.879804125,20.139 0.385804125,19.669 C-0.103195875,19.199 -0.131195875,18.408 0.323804125,17.901 L16.0918041,0.419 C16.3038041,0.162 16.6188041,0 17.0008041,0 C17.3438041,0 17.6518041,0.15 17.8718041,0.386 C17.8778041,0.392 17.8838041,0.393 17.8898041,0.399 L33.6758041,17.901 C34.1328041,18.408 34.1038041,19.199 33.6128041,19.669" id="path-1"></path>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="05_icons/arrow/up" transform="translate(-23.000000, -10.000000)">
+            <g id="🎨Colour" transform="translate(23.000000, 10.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="Mask" fill="#242424" xlink:href="#path-1"></use>
+            </g>
+        </g>
+    </g>
+</svg>

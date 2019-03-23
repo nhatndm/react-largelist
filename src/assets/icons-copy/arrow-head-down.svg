@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="32px" viewBox="0 0 64 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>Mask</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M31.5212926,32.004149 C31.1643045,32.004149 30.8209659,31.867149 30.5731742,31.625149 L0.364631911,2.083149 C-0.136201382,1.592149 -0.119401942,0.814149002 0.40453058,0.342149002 C0.928463102,-0.127850998 1.7589854,-0.111850998 2.26086865,0.379149002 L31.5212926,28.993149 L60.7796165,0.379149002 C61.2835997,-0.111850998 62.114122,-0.125850998 62.6380545,0.342149002 C63.1609371,0.814149002 63.1787865,1.592149 62.6769032,2.083149 L32.4694109,31.625149 C32.2216192,31.867149 31.8782807,32.004149 31.5212926,32.004149" id="arrow-head-down"></path>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="05_icons/arrow/chevron-down" transform="translate(-8.000000, -24.000000)">
+            <g id="🎨-Colour" transform="translate(8.000000, 24.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#arrow-head-down"></use>
+                </mask>
+                <use id="Mask" fill="#242424" xlink:href="#arrow-head-down"></use>
+            </g>
+        </g>
+    </g>
+</svg>

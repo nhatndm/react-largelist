@@ -1,0 +1,22 @@
+.unit-item .unitItemCol12__overlay {
+  width: 100%;
+}
+
+.unit-item .unitItemCol12__overlay > .unitItemCol12__drawer {
+  transform: translate3d(0, 0, 0);
+  width: 673px;
+}
+
+.unit-item .unitItemCol12__overlay > .unitItemCol12__drawer .drawer__body {
+  width: 100%;
+}
+
+.unitItemCol12__overlay .unitItemCol12__drawer__input_group .col-3 .radio {
+  width: 100%;
+}
+
+.unitItemCol12__overlay .unitItemCol12__drawer__input_group input {
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  padding-left: 10px;
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>Mask</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M30,55 C43.8071187,55 55,43.8071187 55,30 C55,16.1928813 43.8071187,5 30,5 C16.1928813,5 5,16.1928813 5,30 C5,43.8071187 16.1928813,55 30,55 Z M29.9999961,2.50005 C14.8362461,2.50005 2.50000005,14.83531 2.50000005,30.00062 C2.50000005,45.16469 14.8362461,57.499946 29.9999961,57.499946 C45.1637461,57.499946 57.4999961,45.16469 57.4999961,30.00062 C57.4999961,14.83531 45.1637461,2.50005 29.9999961,2.50005 Z M29.999998,60 C13.4587469,60 0,46.5422216 0,30.000621 C0,13.4577804 13.4587469,0 29.999998,0 C46.5412491,0 60,13.4577804 60,30.000621 C60,46.5422216 46.5412491,60 29.999998,60 Z" id="path-1"></path>
+    </defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icons/interface/radioOn" transform="translate(-10.000000, -10.000000)">
+            <g id="🎨Colour" transform="translate(10.000000, 10.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="Mask" fill="#000000" xlink:href="#path-1"></use>
+            </g>
+        </g>
+    </g>
+</svg>

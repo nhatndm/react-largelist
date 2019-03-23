@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="35px" height="60px" viewBox="0 0 35 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>Mask</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M33.6636736,60.0355295 C33.3268072,60.0355295 32.993222,59.9205295 32.7296349,59.6885295 L0.41452069,30.9205295 C0.148746211,30.6855295 0,30.3585295 0,30.0175295 C0,29.6775295 0.148746211,29.3505295 0.41452069,29.1155295 L32.7296349,0.348529488 C33.2677462,-0.130470512 34.1186621,-0.113470512 34.6348989,0.385529488 C35.1489483,0.884529488 35.1325425,1.67652949 34.5944312,2.15352949 L3.29100991,30.0175295 L34.5944312,57.8825295 C35.1325425,58.3595295 35.1489483,59.1515295 34.6348989,59.6505295 C34.3702181,59.9065295 34.0147585,60.0355295 33.6636736,60.0355295" id="path-1"></path>
+    </defs>
+    <g id="05_icons/arrow/chevron-left" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-23.000000, -11.000000)">
+        <g id="🎨Colour" transform="translate(40.000000, 40.500000) scale(-1, -1) translate(-40.000000, -40.500000) translate(22.000000, 10.000000)">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="Mask" fill="#242424" xlink:href="#path-1"></use>
+        </g>
+    </g>
+</svg>
