@@ -118,7 +118,7 @@ class UnitItemCol10 extends Component {
   handleCloseDrawer() {
     const dates = this.generateDates();
     ReactDOM.unstable_batchedUpdates(() => {
-      this.setState({ dates: List(dates) });
+      this.setState({ dates: List(dates), Drawer: null });
       this.resetState();
     });
   }
