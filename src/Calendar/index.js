@@ -9,8 +9,8 @@ import { WEEKLY } from "./type";
 
 class Calendar extends Component {
   state = {
-    startDate: subDays(new Date(), 14),
-    endDate: addDays(new Date(), 16),
+    startDate: subDays(new Date(), 0),
+    endDate: addDays(new Date(), 10000),
     reRenderFilterBar: false,
     viewMode: WEEKLY,
     timeLineWidth: ""

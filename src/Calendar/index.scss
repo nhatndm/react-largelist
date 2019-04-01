@@ -87,34 +87,49 @@ $heightCol: 90px;
       }
 
       .col-10 {
-        overflow-x: auto;
+        overflow-x: scroll;
+        overflow-y: hidden;
         white-space: nowrap;
         padding: 0px;
+        position: relative;
+        height: $heightCol;
 
-        > .col-1 {
-          padding: 0px;
-          display: inline-block;
-          height: $heightCol;
-          position: relative;
-          width: $widthCol1;
-          max-width: none;
-          > .col-1-date {
-            margin: 0;
+        > .row-container {
+          position: absolute;
+          height: 100%;
+
+          .col-1 {
+            padding: 0px;
+            display: inline-block;
+            height: 100%;
             position: absolute;
-            bottom: 12px;
-            right: 10px;
-          }
+            width: $widthCol1;
+            max-width: none;
+            max-height: none;
 
-          > .col-1-month {
-            margin: 0;
-            top: 12px;
-            left: 10px;
-            position: absolute;
-          }
-        }
+            > .item-container {
+              height: 100%;
+              width: 100%;
+              position: relative;
+              > .col-1-date {
+                margin: 0;
+                position: absolute;
+                bottom: 12px;
+                right: 10px;
+              }
 
-        .col-1-left {
-          border-left: 3px solid #2ba19a;
+              > .col-1-month {
+                margin: 0;
+                top: 12px;
+                left: 10px;
+                position: absolute;
+              }
+            }
+
+            &.col-1-left {
+              border-left: 3px solid #2ba19a;
+            }
+          }
         }
       }
     }

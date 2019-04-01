@@ -12,8 +12,7 @@ class PropertyLayoutItem extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return (
-      parseInt(nextProps.item.id(), 10) !==
-        parseInt(this.props.item.id(), 10) ||
+      parseInt(nextProps.item.id, 10) !== parseInt(this.props.item.id, 10) ||
       nextState.collapedLayout !== this.state.collapedLayout
     );
   }
@@ -29,7 +28,7 @@ class PropertyLayoutItem extends Component {
           }
         >
           {this.state.collapedLayout ? <CollapedIcon /> : <ExpandIcon />}
-          {item.name()}
+          {item.name}
         </div>
         {!this.state.collapedLayout ? (
           <div className="property-layout-wrapper">
