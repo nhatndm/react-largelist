@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import TimelineCalendar from "./Part/Timeline/Timeline";
 import PropertyLayout from "./Part/PropertyLayout/PropertyLayout";
+import { ScrollSync } from "react-scroll-sync";
 
 export default class CalendarTable extends Component {
   state = {};
@@ -11,10 +12,12 @@ export default class CalendarTable extends Component {
 
   render() {
     return (
-      <Fragment>
-        <TimelineCalendar />
-        <PropertyLayout />
-      </Fragment>
+      <ScrollSync>
+        <Fragment>
+          <TimelineCalendar />
+          {/* <PropertyLayout /> */}
+        </Fragment>
+      </ScrollSync>
     );
   }
 }

@@ -3,6 +3,7 @@ import { ReactComponent as CalendarPreIcon } from "../../../assets/icons/prev.sv
 import { ReactComponent as CalendarNextIcon } from "../../../assets/icons/next.svg";
 import { CalendarContextCosumner } from "../../context";
 import { format } from "date-fns";
+import { ScrollSyncPane } from "react-scroll-sync";
 
 export default class TimelineCalendar extends Component {
   render() {
@@ -43,27 +44,90 @@ export default class TimelineCalendar extends Component {
 }
 
 class TimeLineCol10 extends Component {
+  constructor(props) {
+    super(props);
+    this.numVisibleItems = 12;
+    this.state = {
+      start: 0,
+      end: this.numVisibleItems,
+      data: []
+    };
+    this.containerStyle = { width: this.props.dates().length * 93 };
+
+    this.scollPos = this.scollPos.bind(this);
+    this.renderItem = this.renderItem.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({ data: this.props.dates() });
+  }
+
+  scollPos() {
+    const { data } = this.state;
+
+    let currentIndx = Math.trunc(this.refs.viewport.scrollLeft / 93);
+    currentIndx =
+      currentIndx - this.numVisibleItems >= data.length
+        ? currentIndx - this.numVisibleItems
+        : currentIndx;
+    if (currentIndx !== this.state.start) {
+      this.setState({
+        start: currentIndx,
+        end:
+          currentIndx + this.numVisibleItems >= data.length
+            ? data.length - 1
+            : currentIndx + this.numVisibleItems
+      });
+    }
+  }
+
+  renderItem() {
+    const { data, start, end } = this.state;
+    let result = [];
+    if (data.length > 0) {
+      for (let i = start; i <= end; i++) {
+        let item = data[i];
+        result.push(<Item key={i} item={item} left={i * 93} />);
+      }
+    }
+    return result;
+  }
+
   render() {
-    const { dates } = this.props;
     return (
       // eslint-disable-next-line react/no-string-refs
-      <div className="col-10">
-        {dates().map((v, i) => {
-          return (
-            <div
-              className={v.show.month ? "col-1 col-1-left" : "col-1"}
-              key={i}
-              id={v.id}
-            >
-              {v.show.month ? (
-                <p className="col-1-month">
-                  {format(new Date(v.date), "MMM YYYY")}
-                </p>
-              ) : null}
-              <p className="col-1-date">{v.dateTitle}</p>
-            </div>
-          );
-        })}
+      <ScrollSyncPane>
+        <div
+          ref="viewport"
+          className="col-10 viewport"
+          onScroll={this.scollPos}
+        >
+          <div className="row-container" style={this.containerStyle}>
+            {this.renderItem()}
+          </div>
+        </div>
+      </ScrollSyncPane>
+    );
+  }
+}
+
+class Item extends Component {
+  render() {
+    const { item, left } = this.props;
+    return (
+      <div
+        className={item.show.month ? "col-1 col-1-left" : "col-1"}
+        id={item.id}
+        style={{ left: left }}
+      >
+        <div className="item-container">
+          {item.show.month ? (
+            <p className="col-1-month">
+              {format(new Date(item.date), "MMM YYYY")}
+            </p>
+          ) : null}
+          <p className="col-1-date">{item.dateTitle}</p>
+        </div>
       </div>
     );
   }
