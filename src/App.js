@@ -29,7 +29,7 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <p> Metroresidences Calendar</p>
+        <p> Metroresidences Calendar Improment</p>
         <Calendar />
         <div className="row" style={{ margin: 0 }}>
           <VerticalVirtualize
