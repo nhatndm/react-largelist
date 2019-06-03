@@ -11,7 +11,8 @@ import { DateRangePicker } from "react-dates";
 // import Radio from "component/Form/Radio";
 import moment from "moment";
 import { connect } from "react-redux";
-import { List } from "immutable";
+import { HorizontalVirtualize } from "../../../Virtualized";
+import { ScrollSyncPane } from "react-scroll-sync";
 
 let itemClick = {
   firstItem: {},
@@ -31,11 +32,16 @@ class UnitItemCol10 extends Component {
     Drawer: null
   };
 
+  constructor(props) {
+    super(props);
+    this.renderRow = this.renderRow.bind(this);
+  }
+
   componentDidMount() {
     const { timeLineWidth } = this.props;
     const dates = this.generateDates();
     this.setState({
-      dates: List(dates),
+      dates: dates,
       timeLineWidth: timeLineWidth
     });
   }
@@ -44,7 +50,7 @@ class UnitItemCol10 extends Component {
     const { timeLineWidth } = this.props;
     const dates = this.generateDates();
     this.setState({
-      dates: List(dates),
+      dates: dates,
       timeLineWidth: timeLineWidth
     });
   }
@@ -118,7 +124,7 @@ class UnitItemCol10 extends Component {
   handleCloseDrawer() {
     const dates = this.generateDates();
     ReactDOM.unstable_batchedUpdates(() => {
-      this.setState({ dates: List(dates), Drawer: null });
+      this.setState({ dates: dates, Drawer: null });
       this.resetState();
     });
   }
@@ -198,6 +204,17 @@ class UnitItemCol10 extends Component {
   //   });
   // }
 
+  renderRow({ index }) {
+    return (
+      <UnitItemCol10Col1
+        item={this.state.dates[index]}
+        key={index}
+        changeArrayDates={() => this.handleChangeArrayDate()}
+        setArrayToUnblock={eventId => this.handleFindArrayToUnblock(eventId)}
+      />
+    );
+  }
+
   render() {
     const {
       dates,
@@ -211,18 +228,24 @@ class UnitItemCol10 extends Component {
     return (
       <Fragment>
         <div className="col-10">
-          {dates.map((v, i) => {
-            return (
-              <UnitItemCol10Col1
-                item={v}
-                key={i}
-                changeArrayDates={() => this.handleChangeArrayDate()}
-                setArrayToUnblock={eventId =>
-                  this.handleFindArrayToUnblock(eventId)
-                }
+          {dates.length > 0 ? (
+            <ScrollSyncPane>
+              <HorizontalVirtualize
+                colWidth={({ index }) => {
+                  // if (index % 2 === 0) {
+                  //   return 50;
+                  // }
+
+                  return 93;
+                }}
+                // viewPortHeight={200}
+                // viewPortWidth={400}
+                dataLength={dates.length}
+                numsOfVisibleItems={12}
+                renderRow={this.renderRow}
               />
-            );
-          })}
+            </ScrollSyncPane>
+          ) : null}
           {/* {this.renderEventItem()} */}
         </div>
         {Drawer && (
