@@ -3,8 +3,8 @@ import React, { Component, createRef } from "react";
 import "./index.scss";
 import { last } from "lodash";
 
-let arrayHeight = [];
-let arrayTop = [0];
+let arrayWidth = [];
+let arrayLeft = [0];
 
 let binarySearch = function(arr, x, start, end) {
   if (start > end) return false;
@@ -17,7 +17,7 @@ let binarySearch = function(arr, x, start, end) {
   else return binarySearch(arr, x, mid + 1, end);
 };
 
-export default class VerticalVirtualize extends Component {
+export default class HorizontalVirtualize extends Component {
   constructor(props) {
     super(props);
     this.numVisibleItems = this.props.numsOfVisibleItems;
@@ -25,35 +25,35 @@ export default class VerticalVirtualize extends Component {
     this.state = {
       start: 0,
       end: this.numVisibleItems,
-      height: 100,
+      width: 100,
       dataLength: 0
     };
     this.scollPos = this.scollPos.bind(this);
   }
 
   componentDidMount() {
-    const { dataLength, rowHeight } = this.props;
+    const { dataLength, colWidth } = this.props;
     const { start } = this.state;
     for (let i = start; i <= dataLength - 1; i++) {
-      arrayHeight.push(rowHeight({ index: i }));
+      arrayWidth.push(colWidth({ index: i }));
     }
 
-    arrayHeight.reduce((total, num) => {
-      arrayTop.push(total);
+    arrayWidth.reduce((total, num) => {
+      arrayLeft.push(total);
       return total + num;
     });
 
-    let lastTotalHeight = last(arrayTop) + rowHeight({ index: dataLength - 1 });
-    this.setState({ height: lastTotalHeight, dataLength: dataLength });
+    let lastTotalHeight = last(arrayLeft) + colWidth({ index: dataLength - 1 });
+    this.setState({ width: lastTotalHeight, dataLength: dataLength });
   }
 
   scollPos() {
     const { dataLength } = this.state;
     let currentIndx = binarySearch(
-      arrayTop,
-      this.viewPort.current.scrollTop,
+      arrayLeft,
+      this.viewPort.current.scrollLeft,
       0,
-      arrayTop.length - 1
+      arrayLeft.length - 1
     );
 
     currentIndx =
@@ -77,16 +77,16 @@ export default class VerticalVirtualize extends Component {
   renderRows() {
     let result = [];
     const { start, end } = this.state;
-    const { rowHeight, renderRow } = this.props;
+    const { colWidth, renderRow } = this.props;
     for (let i = start; i <= end; i++) {
       result.push(
         <div
           key={i}
           style={{
-            height: rowHeight({ index: i }),
+            width: colWidth({ index: i }),
             position: "absolute",
-            top: arrayTop[i],
-            width: "100%"
+            left: arrayLeft[i],
+            height: "100%"
           }}
         >
           {renderRow({ index: i })}
@@ -98,14 +98,14 @@ export default class VerticalVirtualize extends Component {
 
   render() {
     const { viewPortHeight, viewPortWidth } = this.props;
-    const { height } = this.state;
+    const { width } = this.state;
     return (
       <div
         ref={this.viewPort}
         style={{
-          height: viewPortHeight ? viewPortHeight : "100vh",
-          overflowY: "scroll",
-          overflowX: "hidden",
+          height: viewPortHeight ? viewPortHeight : "100%",
+          overflowY: "hidden",
+          overflowX: "scroll",
           position: "relative",
           width: viewPortWidth ? viewPortWidth : "100%"
         }}
@@ -113,9 +113,9 @@ export default class VerticalVirtualize extends Component {
       >
         <div
           style={{
-            height: height,
+            width: width,
             position: "relative",
-            width: "100%"
+            height: "100%"
           }}
         >
           {this.renderRows()}
