@@ -4,7 +4,7 @@ import { ReactComponent as CalendarNextIcon } from "../../../assets/icons/next.s
 import { CalendarContextCosumner } from "../../context";
 import { format } from "date-fns";
 import { ScrollSyncPane } from "react-scroll-sync";
-
+import { HorizontalVirtualize } from "../../../Virtualized";
 export default class TimelineCalendar extends Component {
   render() {
     return (
@@ -46,64 +46,43 @@ export default class TimelineCalendar extends Component {
 class TimeLineCol10 extends Component {
   constructor(props) {
     super(props);
-    this.numVisibleItems = 12;
     this.state = {
-      start: 0,
-      end: this.numVisibleItems,
       data: []
     };
-    this.containerStyle = { width: this.props.dates().length * 93 };
 
-    this.scollPos = this.scollPos.bind(this);
-    this.renderItem = this.renderItem.bind(this);
+    this.renderRow = this.renderRow.bind(this);
   }
 
   componentDidMount() {
     this.setState({ data: this.props.dates() });
   }
 
-  scollPos() {
-    const { data } = this.state;
-
-    let currentIndx = Math.trunc(this.refs.viewport.scrollLeft / 93);
-    currentIndx =
-      currentIndx - this.numVisibleItems >= data.length
-        ? currentIndx - this.numVisibleItems
-        : currentIndx;
-    if (currentIndx !== this.state.start) {
-      this.setState({
-        start: currentIndx,
-        end:
-          currentIndx + this.numVisibleItems >= data.length
-            ? data.length - 1
-            : currentIndx + this.numVisibleItems
-      });
-    }
-  }
-
-  renderItem() {
-    const { data, start, end } = this.state;
-    let result = [];
-    if (data.length > 0) {
-      for (let i = start; i <= end; i++) {
-        let item = data[i];
-        result.push(<Item key={i} item={item} left={i * 93} />);
-      }
-    }
-    return result;
+  renderRow({ index }) {
+    return <Item key={index} item={this.state.data[index]} />;
   }
 
   render() {
     return (
       // eslint-disable-next-line react/no-string-refs
       <ScrollSyncPane>
-        <div
-          ref="viewport"
-          className="col-10 viewport"
-          onScroll={this.scollPos}
-        >
-          <div className="row-container" style={this.containerStyle}>
-            {this.renderItem()}
+        <div className="col-10">
+          <div className="row-container">
+            {this.state.data.length > 0 ? (
+              <HorizontalVirtualize
+                colWidth={({ index }) => {
+                  // if (index % 2 === 0) {
+                  //   return 50;
+                  // }
+
+                  return 93;
+                }}
+                // viewPortHeight={200}
+                // viewPortWidth={400}
+                dataLength={this.state.data.length}
+                numsOfVisibleItems={12}
+                renderRow={this.renderRow}
+              />
+            ) : null}
           </div>
         </div>
       </ScrollSyncPane>
@@ -113,12 +92,11 @@ class TimeLineCol10 extends Component {
 
 class Item extends Component {
   render() {
-    const { item, left } = this.props;
+    const { item } = this.props;
     return (
       <div
         className={item.show.month ? "col-1 col-1-left" : "col-1"}
         id={item.id}
-        style={{ left: left }}
       >
         <div className="item-container">
           {item.show.month ? (
