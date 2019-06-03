@@ -42,7 +42,6 @@ class PropertyLayoutItem extends Component {
   }
 
   render() {
-    const { item } = this.props;
     return (
       <div className="property-layout-item">
         <div className="property-layout-wrapper">

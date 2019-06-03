@@ -3,9 +3,9 @@ import "./app.scss";
 import Calendar from "./Calendar";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
-import { VerticalVirtualize, HorizontalVirtualize } from "./Virtualized";
+// import { VerticalVirtualize, HorizontalVirtualize } from "./Virtualized";
 
-const data = new Array(10000).fill(null);
+// const data = new Array(10000).fill(null);
 
 class App extends Component {
   constructor(props) {
@@ -32,6 +32,7 @@ class App extends Component {
         <p> Metroresidences Calendar Improvement</p>
         <Calendar />
         <div className="row" style={{ margin: 0 }}>
+          {/* This is for demo only */}
           {/* <VerticalVirtualize
             rowHeight={({ index }) => {
               // if (index % 2 === 0) {
@@ -60,6 +61,7 @@ class App extends Component {
             numsOfVisibleItems={10}
             renderRow={this.renderRow}
           /> */}
+          {/* This is for demo only */}
         </div>
       </div>
     );

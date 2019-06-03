@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import { ReactComponent as CalendarPreIcon } from "../../../assets/icons/prev.svg";
-import { ReactComponent as CalendarNextIcon } from "../../../assets/icons/next.svg";
 import { CalendarContextCosumner } from "../../context";
 import { format } from "date-fns";
 import { ScrollSyncPane } from "react-scroll-sync";
