@@ -3,9 +3,6 @@ import React, { Component, createRef } from "react";
 import "./index.scss";
 import { last } from "lodash";
 
-let arrayHeight = [];
-let arrayTop = [0];
-
 let binarySearch = function(arr, x, start, end) {
   if (start > end) return false;
 
@@ -26,14 +23,16 @@ export default class VerticalVirtualize extends Component {
       start: 0,
       end: this.numVisibleItems,
       height: 100,
-      dataLength: 0
+      dataLength: 0,
+      arrayHeight: [],
+      arrayTop: [0]
     };
     this.scollPos = this.scollPos.bind(this);
   }
 
   componentDidMount() {
     const { dataLength, rowHeight } = this.props;
-    const { start } = this.state;
+    const { start, arrayHeight, arrayTop } = this.state;
     for (let i = start; i <= dataLength - 1; i++) {
       arrayHeight.push(rowHeight({ index: i }));
     }
@@ -48,7 +47,7 @@ export default class VerticalVirtualize extends Component {
   }
 
   scollPos() {
-    const { dataLength } = this.state;
+    const { dataLength, arrayTop } = this.state;
     let currentIndx = binarySearch(
       arrayTop,
       this.viewPort.current.scrollTop,
@@ -76,7 +75,7 @@ export default class VerticalVirtualize extends Component {
 
   renderRows() {
     let result = [];
-    const { start, end } = this.state;
+    const { start, end, arrayTop } = this.state;
     const { rowHeight, renderRow } = this.props;
     for (let i = start; i <= end; i++) {
       result.push(
