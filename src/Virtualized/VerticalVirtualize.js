@@ -43,7 +43,12 @@ export default class VerticalVirtualize extends Component {
     });
 
     let lastTotalHeight = last(arrayTop) + rowHeight({ index: dataLength - 1 });
-    this.setState({ height: lastTotalHeight, dataLength: dataLength });
+    this.setState({
+      height: lastTotalHeight,
+      dataLength: dataLength,
+      arrayHeight: arrayHeight,
+      arrayTop: arrayTop
+    });
   }
 
   scollPos() {

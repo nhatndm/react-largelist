@@ -3,6 +3,8 @@ import React, { Component, createRef } from "react";
 import "./index.scss";
 import { last } from "lodash";
 
+let currentScrollLeft = 0;
+
 let binarySearch = function(arr, x, start, end) {
   if (start > end) return false;
 
@@ -42,12 +44,46 @@ export default class HorizontalVirtualize extends Component {
       return total + num;
     });
 
+    let currentIndx = binarySearch(
+      arrayLeft,
+      currentScrollLeft,
+      0,
+      arrayLeft.length - 1
+    );
+
+    currentIndx =
+      currentIndx - this.numVisibleItems >= dataLength
+        ? currentIndx - this.numVisibleItems
+        : currentIndx;
+
+    let end =
+      currentIndx + this.numVisibleItems >= dataLength
+        ? dataLength - 1
+        : currentIndx + this.numVisibleItems;
+
     let lastTotalHeight = last(arrayLeft) + colWidth({ index: dataLength - 1 });
-    this.setState({ width: lastTotalHeight, dataLength: dataLength });
+
+    setTimeout(() => {
+      if (this.viewPort.current) {
+        this.viewPort.current.scrollLeft = currentScrollLeft;
+      }
+    }, 1000);
+
+    this.setState({
+      width: lastTotalHeight,
+      dataLength: dataLength,
+      arrayLeft: arrayLeft,
+      arrayWidth: arrayWidth,
+      start: currentIndx,
+      end: end
+    });
   }
 
   scollPos() {
     const { dataLength, arrayLeft } = this.state;
+
+    currentScrollLeft = this.viewPort.current.scrollLeft;
+
     let currentIndx = binarySearch(
       arrayLeft,
       this.viewPort.current.scrollLeft,
@@ -98,6 +134,7 @@ export default class HorizontalVirtualize extends Component {
   render() {
     const { viewPortHeight, viewPortWidth } = this.props;
     const { width } = this.state;
+
     return (
       <div
         ref={this.viewPort}

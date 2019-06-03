@@ -60,20 +60,22 @@ class PropertyLayoutItem extends Component {
               />
             );
           })} */}
-          <VerticalVirtualize
-            rowHeight={({ index }) => {
-              // if (index % 2 === 0) {
-              //   return 50;
-              // }
+          {data.length > 0 ? (
+            <VerticalVirtualize
+              rowHeight={({ index }) => {
+                // if (index % 2 === 0) {
+                //   return 50;
+                // }
 
-              return 90;
-            }}
-            // viewPortHeight={400}
-            // viewPortWidth={500}
-            dataLength={data.length}
-            numsOfVisibleItems={10}
-            renderRow={this.renderRow}
-          />
+                return 90;
+              }}
+              // viewPortHeight={400}
+              // viewPortWidth={500}
+              dataLength={data.length}
+              numsOfVisibleItems={10}
+              renderRow={this.renderRow}
+            />
+          ) : null}
         </div>
       </div>
     );
