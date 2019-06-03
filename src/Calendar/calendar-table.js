@@ -15,7 +15,7 @@ export default class CalendarTable extends Component {
       <ScrollSync>
         <Fragment>
           <TimelineCalendar />
-          {/* <PropertyLayout /> */}
+          <PropertyLayout />
         </Fragment>
       </ScrollSync>
     );

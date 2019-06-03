@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { CalendarContextCosumner } from "../../context";
 import UnitItemTitle from "../UnitItemTitle/UnitItemTitle";
 import UnitItemCol10 from "./UnitItemCol10";
+import { ScrollSyncPane } from "react-scroll-sync";
 import "./index.scss";
 
 export const type = {
@@ -39,17 +40,19 @@ export default class UnitItem extends Component {
               title={item.name ? item.name : `${item.id}`}
               id={item.id}
             />
-            <UnitItemCol10
-              startDate={startDate}
-              endDate={endDate}
-              unitId={item.id}
-              propertyId={item.propertyId}
-              timeLineWidth={timeLineWidth}
-              fetchEvents={() => fetchEvents()}
-              preventReRenderingFilterBar={() =>
-                changeDataState({ reRenderFilterBar: false })
-              }
-            />
+            <ScrollSyncPane>
+              <UnitItemCol10
+                startDate={startDate}
+                endDate={endDate}
+                unitId={item.id}
+                propertyId={item.propertyId}
+                timeLineWidth={timeLineWidth}
+                fetchEvents={() => fetchEvents()}
+                preventReRenderingFilterBar={() =>
+                  changeDataState({ reRenderFilterBar: false })
+                }
+              />
+            </ScrollSyncPane>
           </div>
         )}
       </CalendarContextCosumner>

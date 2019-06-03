@@ -64,10 +64,10 @@ class TimeLineCol10 extends Component {
   render() {
     return (
       // eslint-disable-next-line react/no-string-refs
-      <ScrollSyncPane>
-        <div className="col-10">
-          <div className="row-container">
-            {this.state.data.length > 0 ? (
+      <div className="col-10">
+        <div className="row-container">
+          {this.state.data.length > 0 ? (
+            <ScrollSyncPane>
               <HorizontalVirtualize
                 colWidth={({ index }) => {
                   // if (index % 2 === 0) {
@@ -82,10 +82,10 @@ class TimeLineCol10 extends Component {
                 numsOfVisibleItems={12}
                 renderRow={this.renderRow}
               />
-            ) : null}
-          </div>
+            </ScrollSyncPane>
+          ) : null}
         </div>
-      </ScrollSyncPane>
+      </div>
     );
   }
 }

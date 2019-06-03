@@ -142,6 +142,7 @@ $heightCol: 90px;
     overflow-y: auto;
     margin-left: -15px;
     margin-right: -15px;
+    padding-top: 5px;
     background-color: var(--color-mr-gray);
 
     .property-layout-item {
@@ -196,11 +197,11 @@ $heightCol: 90px;
 
             .unit-item-title {
               box-shadow: 6px 0px 10px 0 rgba(36, 36, 36, 0.4);
-              width: 97%;
+              // width: 97%;
               height: 100%;
               background-color: white;
               border: 2px solid var(--color-mr-gray);
-              margin-left: 8px;
+              // margin-left: 8px;
               padding-left: 10px;
               padding-top: 10px;
             }
