@@ -14,7 +14,7 @@ export default class TimelineCalendar extends Component {
             <div className="timeline row">
               <div className="col-2">
                 <span>Property</span>
-                <div
+                {/* <div
                   className="timeline-preicon"
                   onClick={() => {
                     changeTimeState(
@@ -24,17 +24,17 @@ export default class TimelineCalendar extends Component {
                   }}
                 >
                   <CalendarPreIcon />
-                </div>
+                </div> */}
               </div>
               <TimeLineCol10 dates={dates} />
-              <div
+              {/* <div
                 className="timeline-nexicon"
                 onClick={() => {
                   changeTimeState(addDays(endDate, 0), addDays(endDate, 13));
                 }}
               >
                 <CalendarNextIcon />
-              </div>
+              </div> */}
             </div>
           </div>
         )}
