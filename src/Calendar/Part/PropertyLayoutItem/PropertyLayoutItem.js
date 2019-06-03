@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { name, random } from "faker";
 import { VerticalVirtualize } from "../../../Virtualized";
 
-const data = new Array(50).fill(null).map((v, i) => {
+const data = new Array(200).fill(null).map((v, i) => {
   return {
     id: random.uuid(),
     name: name.title(),
