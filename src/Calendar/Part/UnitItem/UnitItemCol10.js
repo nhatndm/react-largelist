@@ -243,6 +243,9 @@ class UnitItemCol10 extends Component {
                 dataLength={dates.length}
                 numsOfVisibleItems={12}
                 renderRow={this.renderRow}
+                reachedScrollStop={() =>
+                  console.log("The horizontal scroll is done, Will call api")
+                }
               />
             </ScrollSyncPane>
           ) : null}

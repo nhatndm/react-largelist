@@ -3,6 +3,8 @@ import React, { Component, createRef } from "react";
 import "./index.scss";
 import { last } from "lodash";
 
+let scrollStatus = false;
+
 let binarySearch = function(arr, x, start, end) {
   if (start > end) return false;
 
@@ -27,6 +29,7 @@ export default class VerticalVirtualize extends Component {
       arrayHeight: [],
       arrayTop: [0]
     };
+    this._timeout = null;
     this.scollPos = this.scollPos.bind(this);
   }
 
@@ -71,10 +74,30 @@ export default class VerticalVirtualize extends Component {
         : currentIndx + this.numVisibleItems;
 
     if (currentIndx !== this.state.start) {
-      this.setState({
-        start: currentIndx,
-        end: end
-      });
+      if (this._timeout) {
+        clearTimeout(this._timeout);
+      }
+
+      this._timeout = setTimeout(() => {
+        if (scrollStatus) {
+          this._timeout = null;
+          scrollStatus = false;
+          clearTimeout(this._timeout);
+          if (this.props.reachedScrollStop) {
+            this.props.reachedScrollStop();
+          }
+        }
+      }, 1000);
+
+      this.setState(
+        {
+          start: currentIndx,
+          end: end
+        },
+        () => {
+          scrollStatus = true;
+        }
+      );
     }
   }
 
