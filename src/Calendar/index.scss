@@ -37,7 +37,7 @@ $heightCol: 90px;
       margin-right: 0px;
       margin-left: 0px;
 
-      > .col-2 {
+      > .col-3 {
         position: relative;
         border-top-left-radius: 15px;
         box-shadow: 5px 1px 10px 0 rgba(36, 36, 36, 0.4);
@@ -86,7 +86,7 @@ $heightCol: 90px;
         cursor: pointer;
       }
 
-      .col-10 {
+      .col-9 {
         overflow-x: scroll;
         overflow-y: hidden;
         white-space: nowrap;
@@ -238,7 +238,7 @@ $heightCol: 90px;
           margin-right: 0px;
           margin-bottom: 1px;
 
-          > .col-2 {
+          > .col-3 {
             z-index: 1;
             height: $heightCol;
             padding: 0px;
@@ -258,7 +258,7 @@ $heightCol: 90px;
             }
           }
 
-          .col-10 {
+          .col-9 {
             overflow-x: auto;
             white-space: nowrap;
             padding: 0px;

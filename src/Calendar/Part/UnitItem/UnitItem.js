@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { CalendarContextCosumner } from "../../context";
 import UnitItemTitle from "../UnitItemTitle/UnitItemTitle";
-import UnitItemCol10 from "./UnitItemCol10";
+import UnitItemData from "./UnitItemData";
 import "./index.scss";
 
 export const type = {
@@ -41,7 +41,7 @@ export default class UnitItem extends Component {
               propertyItemName={item.propertyItemName}
               dailytPrice={item.dailyPrice}
             />
-            <UnitItemCol10
+            <UnitItemData
               startDate={startDate}
               endDate={endDate}
               unitId={item.id}

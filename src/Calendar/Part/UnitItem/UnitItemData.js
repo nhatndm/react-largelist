@@ -20,7 +20,7 @@ let itemClick = {
   secondItem: {}
 };
 
-class UnitItemCol10 extends Component {
+class UnitItemData extends Component {
   state = {
     dates: [],
     action: "",
@@ -207,7 +207,7 @@ class UnitItemCol10 extends Component {
 
   renderRow({ index }) {
     return (
-      <UnitItemCol10Col1
+      <UnitItemDataCol1
         item={this.state.dates[index]}
         key={index}
         changeArrayDates={() => this.handleChangeArrayDate()}
@@ -228,7 +228,7 @@ class UnitItemCol10 extends Component {
     } = this.state;
     return (
       <Fragment>
-        <div className="col-10">
+        <div className="col-9">
           {dates.length > 0 ? (
             <ScrollSyncPane>
               <HorizontalVirtualize
@@ -331,7 +331,7 @@ class UnitItemCol10 extends Component {
   }
 }
 
-class UnitItemCol10Col1 extends Component {
+class UnitItemDataCol1 extends Component {
   state = {
     status: this.props.item.status
   };
@@ -398,4 +398,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(UnitItemCol10);
+)(UnitItemData);

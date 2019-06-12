@@ -13,7 +13,7 @@ export default class TimelineCalendar extends Component {
         {({ changeTimeState, startDate, endDate, dates, addDays, subDays }) => (
           <div className="timeline-wrapper">
             <div className="timeline row">
-              <div className="col-2">
+              <div className="col-3">
                 <span>Property</span>
                 {/* <div
                   className="timeline-preicon"
@@ -27,7 +27,7 @@ export default class TimelineCalendar extends Component {
                   <CalendarPreIcon />
                 </div> */}
               </div>
-              <TimeLineCol10Redux dates={dates} />
+              <TimeLineDataRedux dates={dates} />
               {/* <div
                 className="timeline-nexicon"
                 onClick={() => {
@@ -44,7 +44,7 @@ export default class TimelineCalendar extends Component {
   }
 }
 
-class TimeLineCol10 extends Component {
+class TimeLineData extends Component {
   constructor(props) {
     super(props);
     this.numsOfVisibleItems = 30;
@@ -71,7 +71,7 @@ class TimeLineCol10 extends Component {
   render() {
     return (
       // eslint-disable-next-line react/no-string-refs
-      <div className="col-10">
+      <div className="col-9">
         <div className="row-container">
           {this.state.data.length > 0 ? (
             <ScrollSyncPane>
@@ -153,7 +153,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const TimeLineCol10Redux = connect(
+const TimeLineDataRedux = connect(
   mapStateToProps,
   mapDispatchToProps
-)(TimeLineCol10);
+)(TimeLineData);
