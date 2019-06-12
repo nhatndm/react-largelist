@@ -84,7 +84,10 @@ export default class VerticalVirtualize extends Component {
           scrollStatus = false;
           clearTimeout(this._timeout);
           if (this.props.reachedScrollStop) {
-            this.props.reachedScrollStop();
+            this.props.reachedScrollStop({
+              startIndex: this.state.start,
+              endIndex: this.state.end
+            });
           }
         }
       }, 1000);
