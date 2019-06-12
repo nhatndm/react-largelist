@@ -6,9 +6,14 @@ export default class UnitItemTitle extends Component {
   }
 
   render() {
+    const { title, propertyItemName, dailytPrice } = this.props;
     return (
       <div className="col-2">
-        <div className="unit-item-title">{this.props.title}</div>
+        <div className="unit-item-title">
+          <p className="property-item-name">{propertyItemName}</p>
+          <p className="unit-name">Unit: {title}</p>
+          <p className="unit-price">Daily: {dailytPrice}</p>
+        </div>
       </div>
     );
   }

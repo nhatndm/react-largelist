@@ -20,3 +20,35 @@
   border-radius: 5px;
   padding-left: 10px;
 }
+
+.unit-item > .col-2 > .unit-item-title {
+  p {
+    margin: 0px;
+  }
+
+  .property-item-name {
+    color: rgb(36, 36, 36);
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 0.44px;
+    line-height: 21px;
+  }
+
+  .unit-name {
+    margin-top: 4px;
+    color: rgb(141, 141, 141);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.38px;
+    line-height: 18px;
+  }
+
+  .unit-price {
+    margin-top: 4px;
+    color: rgb(141, 141, 141);
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 0.38px;
+    line-height: 18px;
+  }
+}

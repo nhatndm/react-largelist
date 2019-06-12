@@ -36,8 +36,10 @@ export default class UnitItem extends Component {
         }) => (
           <div className="unit-item row">
             <UnitItemTitle
-              title={item.name ? item.name : `${item.id}`}
-              id={item.id}
+              title={item.unit}
+              id={item.unitId}
+              propertyItemName={item.propertyItemName}
+              dailytPrice={item.dailyPrice}
             />
             <UnitItemCol10
               startDate={startDate}

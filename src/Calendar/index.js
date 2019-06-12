@@ -6,6 +6,7 @@ import { addDays, subDays } from "date-fns";
 import { CalendarContextProvider } from "./context";
 import { getArrayDates, convertToIdDate } from "./date";
 import { WEEKLY } from "./type";
+import { fetchPropertyData } from "../action";
 
 class Calendar extends Component {
   state = {
@@ -15,6 +16,10 @@ class Calendar extends Component {
     viewMode: WEEKLY,
     timeLineWidth: ""
   };
+
+  componentDidMount() {
+    this.props.fetchPropertyData();
+  }
 
   render() {
     return (
@@ -65,7 +70,13 @@ class Calendar extends Component {
   }
 }
 
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchPropertyData: () => dispatch(fetchPropertyData())
+  };
+};
+
 export default connect(
   null,
-  null
+  mapDispatchToProps
 )(Calendar);

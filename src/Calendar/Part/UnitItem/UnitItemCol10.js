@@ -236,12 +236,12 @@ class UnitItemCol10 extends Component {
                   //   return 50;
                   // }
 
-                  return 93;
+                  return 50;
                 }}
                 // viewPortHeight={200}
                 // viewPortWidth={400}
                 dataLength={dates.length}
-                numsOfVisibleItems={12}
+                numsOfVisibleItems={30}
                 renderRow={this.renderRow}
                 reachedScrollStop={() =>
                   console.log("The horizontal scroll is done, Will call api")
@@ -349,23 +349,24 @@ class UnitItemCol10Col1 extends Component {
       <div
         className={status === type.BLOCKING ? "col-1 blocking" : "col-1"}
         onClick={() => {
-          Object.keys(itemClick.firstItem).length > 0
-            ? (itemClick.secondItem = item)
-            : (itemClick.firstItem = item);
+          // Object.keys(itemClick.firstItem).length > 0
+          //   ? (itemClick.secondItem = item)
+          //   : (itemClick.firstItem = item);
 
-          if (
-            status === type.AVAILABLE &&
-            (Object.keys(itemClick.firstItem).length === 0 ||
-              Object.keys(itemClick.secondItem).length === 0)
-          ) {
-            return this.setState({ status: type.BLOCKING });
-          }
+          // if (
+          //   status === type.AVAILABLE &&
+          //   (Object.keys(itemClick.firstItem).length === 0 ||
+          //     Object.keys(itemClick.secondItem).length === 0)
+          // ) {
+          //   return this.setState({ status: type.BLOCKING });
+          // }
 
-          if (itemClick.firstItem.status === type.BLOCKING) {
-            return this.props.setArrayToUnblock(item.eventId);
-          }
+          // if (itemClick.firstItem.status === type.BLOCKING) {
+          //   return this.props.setArrayToUnblock(item.eventId);
+          // }
 
-          return this.props.changeArrayDates();
+          // return this.props.changeArrayDates();
+          return;
         }}
       />
     );

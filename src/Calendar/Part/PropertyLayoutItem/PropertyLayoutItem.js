@@ -1,18 +1,18 @@
 import React, { Component } from "react";
-// import { ReactComponent as ExpandIcon } from "../../../assets/icons/arrow-twirl-down.svg";
+import { ReactComponent as BuildingIcon } from "../../../assets/icons/building.svg";
 // import { ReactComponent as CollapedIcon } from "../../../assets/icons/arrow-twirl-up.svg";
 import UnitItem from "../UnitItem/UnitItem";
 import { connect } from "react-redux";
 import { name, random } from "faker";
 import { VerticalVirtualize } from "../../../Virtualized";
 
-const data = new Array(200).fill(null).map((v, i) => {
-  return {
-    id: random.uuid(),
-    name: name.title(),
-    propertyId: random.uuid()
-  };
-});
+// const data = new Array(200).fill(null).map((v, i) => {
+//   return {
+//     id: random.uuid(),
+//     name: name.title(),
+//     propertyId: random.uuid()
+//   };
+// });
 
 class PropertyLayoutItem extends Component {
   state = {
@@ -24,14 +24,20 @@ class PropertyLayoutItem extends Component {
     this.renderRow = this.renderRow.bind(this);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      parseInt(nextProps.item.id, 10) !== parseInt(this.props.item.id, 10) ||
-      nextState.collapedLayout !== this.state.collapedLayout
-    );
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return (
+  //     parseInt(nextProps.item.id, 10) !== parseInt(this.props.item.id, 10) ||
+  //     nextState.collapedLayout !== this.state.collapedLayout
+  //   );
+  // }
 
   renderRow({ index }) {
+    const data = this.props.data;
+    const item = data[index];
+    if (item.showPropertyName) {
+      return <PropertyLayoutItemTitle propertyName={item.propertyName} />;
+    }
+
     return (
       <UnitItem
         key={index}
@@ -42,30 +48,20 @@ class PropertyLayoutItem extends Component {
   }
 
   render() {
+    const data = this.props.data;
     return (
       <div className="property-layout-item">
         <div className="property-layout-wrapper">
-          <div className="scrollbar-right" />
-          {/* {new Array(5).fill(null).map((v, i) => {
-            const unit = {
-              id: random.uuid(),
-              name: name.title(),
-              propertyId: random.uuid()
-            };
-            return (
-              <UnitItem
-                key={i}
-                item={unit}
-                unitIDChanged={parseInt(this.props.unitIDChanged, 10)}
-              />
-            );
-          })} */}
           {data.length > 0 ? (
             <VerticalVirtualize
               rowHeight={({ index }) => {
                 // if (index % 2 === 0) {
                 //   return 50;
                 // }
+
+                if (data[index].showPropertyName) {
+                  return 48;
+                }
 
                 return 90;
               }}
@@ -85,7 +81,22 @@ class PropertyLayoutItem extends Component {
   }
 }
 
+const PropertyLayoutItemTitle = props => {
+  return (
+    <div className="property-layout-item-title">
+      <BuildingIcon style={{ width: 24 }} />
+      <p className="title">{props.propertyName}</p>
+    </div>
+  );
+};
+
+const mapStateToProps = rootState => {
+  return {
+    data: rootState.data
+  };
+};
+
 export default connect(
-  null,
+  mapStateToProps,
   null
 )(PropertyLayoutItem);

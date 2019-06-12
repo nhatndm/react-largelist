@@ -4,6 +4,7 @@ import Calendar from "./Calendar";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
 // import { VerticalVirtualize, HorizontalVirtualize } from "./Virtualized";
+import { fetchPropertyData } from "./action";
 
 // const data = new Array(10000).fill(null);
 

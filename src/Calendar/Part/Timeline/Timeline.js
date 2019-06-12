@@ -72,12 +72,12 @@ class TimeLineCol10 extends Component {
                   //   return 50;
                   // }
 
-                  return 93;
+                  return 50;
                 }}
                 // viewPortHeight={200}
                 // viewPortWidth={400}
                 dataLength={this.state.data.length}
-                numsOfVisibleItems={12}
+                numsOfVisibleItems={30}
                 renderRow={this.renderRow}
               />
             </ScrollSyncPane>
@@ -97,12 +97,20 @@ class Item extends Component {
         id={item.id}
       >
         <div className="item-container">
+          <div
+            className={`col-1-month ${
+              item.show.borderLeft ? "show-border-left" : ""
+            }`}
+          />
           {item.show.month ? (
-            <p className="col-1-month">
-              {format(new Date(item.date), "MMM YYYY")}
+            <p className="col-1-show-month">
+              {format(new Date(item.date), "MMMM YYYY")}
             </p>
           ) : null}
-          <p className="col-1-date">{item.dateTitle}</p>
+          <div className="col-1-date-month">
+            {format(item.date, "ddd").toLocaleUpperCase()}
+          </div>
+          <div className="col-1-date-day">{format(item.date, "DD")}</div>
         </div>
       </div>
     );
