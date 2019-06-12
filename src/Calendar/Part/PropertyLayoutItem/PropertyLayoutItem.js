@@ -68,7 +68,7 @@ class PropertyLayoutItem extends Component {
               // viewPortHeight={400}
               // viewPortWidth={500}
               dataLength={data.length}
-              numsOfVisibleItems={10}
+              numsOfVisibleItems={20}
               renderRow={this.renderRow}
               reachedScrollStop={() =>
                 console.log("The verticall scroll is done, Will call api")
