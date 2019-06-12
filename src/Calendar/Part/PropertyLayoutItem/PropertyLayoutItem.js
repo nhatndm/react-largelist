@@ -5,6 +5,7 @@ import UnitItem from "../UnitItem/UnitItem";
 import { connect } from "react-redux";
 import { name, random } from "faker";
 import { VerticalVirtualize } from "../../../Virtualized";
+import { saveCurrentUnits } from "../../../action";
 
 // const data = new Array(200).fill(null).map((v, i) => {
 //   return {
@@ -21,6 +22,7 @@ class PropertyLayoutItem extends Component {
 
   constructor(props) {
     super(props);
+    this.numsOfVisibleItems = 20;
     this.renderRow = this.renderRow.bind(this);
   }
 
@@ -30,6 +32,16 @@ class PropertyLayoutItem extends Component {
   //     nextState.collapedLayout !== this.state.collapedLayout
   //   );
   // }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.data.length > 0) {
+      const units = [];
+      for (let i = 0; i < this.numsOfVisibleItems; i++) {
+        units.push(nextProps.data[i].unitId);
+      }
+      this.props.saveCurrentUnits(units);
+    }
+  }
 
   renderRow({ index }) {
     const data = this.props.data;
@@ -68,7 +80,7 @@ class PropertyLayoutItem extends Component {
               // viewPortHeight={400}
               // viewPortWidth={500}
               dataLength={data.length}
-              numsOfVisibleItems={20}
+              numsOfVisibleItems={this.numsOfVisibleItems}
               renderRow={this.renderRow}
               reachedScrollStop={() =>
                 console.log("The verticall scroll is done, Will call api")
@@ -96,7 +108,13 @@ const mapStateToProps = rootState => {
   };
 };
 
+const mapDispatchToProps = dispatch => {
+  return {
+    saveCurrentUnits: units => dispatch(saveCurrentUnits(units))
+  };
+};
+
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(PropertyLayoutItem);

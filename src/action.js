@@ -1,5 +1,9 @@
 import { random, name, finance } from "faker";
-import { FETCH_PROPERTY_DATA } from "./type";
+import {
+  FETCH_PROPERTY_DATA,
+  SAVE_CURRENT_TIMESTAMP,
+  SAVE_CURRENT_UNITS
+} from "./type";
 
 export const fetchPropertyData = () => {
   const array = new Array(1000).fill(null).map((v, i) => {
@@ -17,5 +21,22 @@ export const fetchPropertyData = () => {
   return {
     type: FETCH_PROPERTY_DATA,
     data: array
+  };
+};
+
+export const saveCurrentTimeStamp = (startTime, endTime) => {
+  return {
+    type: SAVE_CURRENT_TIMESTAMP,
+    timeStamp: {
+      startTime: startTime,
+      endTime: endTime
+    }
+  };
+};
+
+export const saveCurrentUnits = units => {
+  return {
+    type: SAVE_CURRENT_UNITS,
+    units: units
   };
 };

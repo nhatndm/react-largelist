@@ -3,6 +3,9 @@ import { CalendarContextCosumner } from "../../context";
 import { format } from "date-fns";
 import { ScrollSyncPane } from "react-scroll-sync";
 import { HorizontalVirtualize } from "../../../Virtualized";
+import { connect } from "react-redux";
+import { saveCurrentTimeStamp } from "../../../action";
+
 export default class TimelineCalendar extends Component {
   render() {
     return (
@@ -24,7 +27,7 @@ export default class TimelineCalendar extends Component {
                   <CalendarPreIcon />
                 </div> */}
               </div>
-              <TimeLineCol10 dates={dates} />
+              <TimeLineCol10Redux dates={dates} />
               {/* <div
                 className="timeline-nexicon"
                 onClick={() => {
@@ -44,6 +47,7 @@ export default class TimelineCalendar extends Component {
 class TimeLineCol10 extends Component {
   constructor(props) {
     super(props);
+    this.numsOfVisibleItems = 30;
     this.state = {
       data: []
     };
@@ -53,6 +57,14 @@ class TimeLineCol10 extends Component {
 
   componentDidMount() {
     this.setState({ data: this.props.dates() });
+  }
+
+  componentDidUpdate() {
+    if (this.state.data.length > 0) {
+      const startDate = this.state.data[0];
+      const endDate = this.state.data[this.numsOfVisibleItems - 1];
+      this.props.saveCurrentTimeStamp(startDate.date, endDate.date);
+    }
   }
 
   renderRow({ index }) {
@@ -77,8 +89,11 @@ class TimeLineCol10 extends Component {
                 // viewPortHeight={200}
                 // viewPortWidth={400}
                 dataLength={this.state.data.length}
-                numsOfVisibleItems={30}
+                numsOfVisibleItems={this.numsOfVisibleItems}
                 renderRow={this.renderRow}
+                style={{
+                  borderTopRightRadius: 10
+                }}
               />
             </ScrollSyncPane>
           ) : null}
@@ -87,6 +102,18 @@ class TimeLineCol10 extends Component {
     );
   }
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+    saveCurrentTimeStamp: (startTime, endTime) =>
+      dispatch(saveCurrentTimeStamp(startTime, endTime))
+  };
+};
+
+const TimeLineCol10Redux = connect(
+  null,
+  mapDispatchToProps
+)(TimeLineCol10);
 
 class Item extends Component {
   render() {

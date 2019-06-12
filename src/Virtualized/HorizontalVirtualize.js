@@ -154,7 +154,7 @@ export default class HorizontalVirtualize extends Component {
   }
 
   render() {
-    const { viewPortHeight, viewPortWidth } = this.props;
+    const { viewPortHeight, viewPortWidth, style } = this.props;
     const { width } = this.state;
 
     return (
@@ -165,7 +165,8 @@ export default class HorizontalVirtualize extends Component {
           overflowY: "hidden",
           overflowX: "scroll",
           position: "relative",
-          width: viewPortWidth ? viewPortWidth : "100%"
+          width: viewPortWidth ? viewPortWidth : "100%",
+          ...style
         }}
         onScroll={this.scollPos}
       >
