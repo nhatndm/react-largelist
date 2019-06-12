@@ -191,6 +191,7 @@ $heightCol: 90px;
           font-weight: 900;
           letter-spacing: 0.44px;
           line-height: 21px;
+          margin-left: 10px;
         }
       }
 
@@ -242,6 +243,15 @@ $heightCol: 90px;
             z-index: 1;
             height: $heightCol;
             padding: 0px;
+            position: relative;
+
+            > svg {
+              position: absolute;
+              right: 15px;
+              top: 35px;
+              width: 24px;
+              height: 24px;
+            }
 
             .unit-item-title {
               // box-shadow: 6px 0px 10px 0 rgba(36, 36, 36, 0.4);

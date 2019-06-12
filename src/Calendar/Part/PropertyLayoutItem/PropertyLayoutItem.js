@@ -108,7 +108,7 @@ class PropertyLayoutItem extends Component {
 const PropertyLayoutItemTitle = props => {
   return (
     <div className="property-layout-item-title">
-      <BuildingIcon style={{ width: 24 }} />
+      <BuildingIcon style={{ width: 24, height: 24 }} />
       <p className="title">{props.propertyName}</p>
     </div>
   );
