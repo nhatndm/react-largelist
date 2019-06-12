@@ -352,7 +352,7 @@ class UnitItemCol10Col1 extends Component {
 
   render() {
     const { status } = this.state;
-    const { item } = this.props;
+    // const { item } = this.props;
 
     return (
       <div

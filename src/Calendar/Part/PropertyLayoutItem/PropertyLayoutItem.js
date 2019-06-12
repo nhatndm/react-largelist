@@ -3,7 +3,7 @@ import { ReactComponent as BuildingIcon } from "../../../assets/icons/building.s
 // import { ReactComponent as CollapedIcon } from "../../../assets/icons/arrow-twirl-up.svg";
 import UnitItem from "../UnitItem/UnitItem";
 import { connect } from "react-redux";
-import { name, random } from "faker";
+// import { name, random } from "faker";
 import { VerticalVirtualize } from "../../../Virtualized";
 import { saveCurrentUnits } from "../../../action";
 
