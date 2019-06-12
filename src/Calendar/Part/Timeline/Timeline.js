@@ -55,14 +55,11 @@ class TimeLineCol10 extends Component {
     this.renderRow = this.renderRow.bind(this);
   }
 
-  componentDidMount() {
-    this.setState({ data: this.props.dates() });
-  }
-
-  componentDidUpdate() {
+  async componentDidMount() {
+    await this.setState({ data: this.props.dates() });
     if (this.state.data.length > 0) {
       const startDate = this.state.data[0];
-      const endDate = this.state.data[this.numsOfVisibleItems - 1];
+      const endDate = this.state.data[this.numsOfVisibleItems];
       this.props.saveCurrentTimeStamp(startDate.date, endDate.date);
     }
   }
@@ -91,6 +88,17 @@ class TimeLineCol10 extends Component {
                 dataLength={this.state.data.length}
                 numsOfVisibleItems={this.numsOfVisibleItems}
                 renderRow={this.renderRow}
+                reachedScrollStop={({ startIndex, endIndex }) => {
+                  const startDate = this.state.data[startIndex];
+                  const endDate = this.state.data[endIndex];
+                  console.log(
+                    `Will Call Api from ${startDate.date} to ${
+                      endDate.date
+                    } for units`
+                  );
+                  console.log(this.props.units);
+                  this.props.saveCurrentTimeStamp(startDate.date, endDate.date);
+                }}
                 style={{
                   borderTopRightRadius: 10
                 }}
@@ -102,18 +110,6 @@ class TimeLineCol10 extends Component {
     );
   }
 }
-
-const mapDispatchToProps = dispatch => {
-  return {
-    saveCurrentTimeStamp: (startTime, endTime) =>
-      dispatch(saveCurrentTimeStamp(startTime, endTime))
-  };
-};
-
-const TimeLineCol10Redux = connect(
-  null,
-  mapDispatchToProps
-)(TimeLineCol10);
 
 class Item extends Component {
   render() {
@@ -143,3 +139,21 @@ class Item extends Component {
     );
   }
 }
+
+const mapStateToProps = rootState => {
+  return {
+    units: rootState.units
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    saveCurrentTimeStamp: (startTime, endTime) =>
+      dispatch(saveCurrentTimeStamp(startTime, endTime))
+  };
+};
+
+const TimeLineCol10Redux = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TimeLineCol10);

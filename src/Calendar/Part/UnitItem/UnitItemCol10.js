@@ -13,6 +13,7 @@ import moment from "moment";
 import { connect } from "react-redux";
 import { HorizontalVirtualize } from "../../../Virtualized";
 import { ScrollSyncPane } from "react-scroll-sync";
+import { saveCurrentTimeStamp } from "../../../action";
 
 let itemClick = {
   firstItem: {},
@@ -243,9 +244,17 @@ class UnitItemCol10 extends Component {
                 dataLength={dates.length}
                 numsOfVisibleItems={30}
                 renderRow={this.renderRow}
-                reachedScrollStop={() =>
-                  console.log("The horizontal scroll is done, Will call api")
-                }
+                reachedScrollStop={({ startIndex, endIndex }) => {
+                  const startDate = this.state.dates[startIndex];
+                  const endDate = this.state.dates[endIndex];
+                  console.log(
+                    `Will Call Api from ${startDate.date} to ${
+                      endDate.date
+                    } for units`
+                  );
+                  console.log(this.props.units);
+                  this.props.saveCurrentTimeStamp(startDate.date, endDate.date);
+                }}
               />
             </ScrollSyncPane>
           ) : null}
@@ -373,7 +382,20 @@ class UnitItemCol10Col1 extends Component {
   }
 }
 
+const mapStateToProps = rootState => {
+  return {
+    units: rootState.units
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    saveCurrentTimeStamp: (startTime, endTime) =>
+      dispatch(saveCurrentTimeStamp(startTime, endTime))
+  };
+};
+
 export default connect(
-  null,
-  null
+  mapStateToProps,
+  mapDispatchToProps
 )(UnitItemCol10);

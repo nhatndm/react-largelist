@@ -36,7 +36,7 @@ class PropertyLayoutItem extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.data.length > 0) {
       const units = [];
-      for (let i = 0; i < this.numsOfVisibleItems; i++) {
+      for (let i = 0; i <= this.numsOfVisibleItems; i++) {
         units.push(nextProps.data[i].unitId);
       }
       this.props.saveCurrentUnits(units);
@@ -82,9 +82,21 @@ class PropertyLayoutItem extends Component {
               dataLength={data.length}
               numsOfVisibleItems={this.numsOfVisibleItems}
               renderRow={this.renderRow}
-              reachedScrollStop={() =>
-                console.log("The verticall scroll is done, Will call api")
-              }
+              reachedScrollStop={({ startIndex, endIndex }) => {
+                const units = [];
+
+                for (let i = startIndex; i <= endIndex; i++) {
+                  units.push(this.props.data[i].unitId);
+                }
+
+                console.log(
+                  `Will Call Api from ${this.props.timeStamp.startTime} to ${
+                    this.props.timeStamp.endTime
+                  } for units: `
+                );
+                console.log(units);
+                this.props.saveCurrentUnits(units);
+              }}
             />
           ) : null}
         </div>
@@ -104,7 +116,8 @@ const PropertyLayoutItemTitle = props => {
 
 const mapStateToProps = rootState => {
   return {
-    data: rootState.data
+    data: rootState.data,
+    timeStamp: rootState.timeStamp
   };
 };
 
