@@ -53,6 +53,8 @@ class TimeLineData extends Component {
     };
 
     this.renderRow = this.renderRow.bind(this);
+    this.renderColWidth = this.renderColWidth.bind(this);
+    this.reachedScrollStop = this.reachedScrollStop.bind(this);
   }
 
   async componentDidMount() {
@@ -68,6 +70,24 @@ class TimeLineData extends Component {
     return <Item key={index} item={this.state.data[index]} />;
   }
 
+  renderColWidth({ index }) {
+    return 50;
+  }
+
+  async reachedScrollStop({ startIndex, endIndex }) {
+    const startTime = this.state.data[startIndex];
+    const endTime = this.state.data[endIndex];
+
+    await this.props.saveCurrentTimeStamp(startTime.date, endTime.date);
+    await this.props.fetchEventsData(
+      {
+        startTime: startTime.date,
+        endTime: endTime.date
+      },
+      this.props.units
+    );
+  }
+
   render() {
     return (
       // eslint-disable-next-line react/no-string-refs
@@ -76,34 +96,11 @@ class TimeLineData extends Component {
           {this.state.data.length > 0 ? (
             <ScrollSyncPane>
               <HorizontalVirtualize
-                colWidth={({ index }) => {
-                  // if (index % 2 === 0) {
-                  //   return 50;
-                  // }
-
-                  return 50;
-                }}
-                // viewPortHeight={200}
-                // viewPortWidth={400}
+                colWidth={this.renderColWidth}
                 dataLength={this.state.data.length}
                 numsOfVisibleItems={this.numsOfVisibleItems}
                 renderRow={this.renderRow}
-                reachedScrollStop={async ({ startIndex, endIndex }) => {
-                  const startTime = this.state.data[startIndex];
-                  const endTime = this.state.data[endIndex];
-
-                  await this.props.saveCurrentTimeStamp(
-                    startTime.date,
-                    endTime.date
-                  );
-                  await this.props.fetchEventsData(
-                    {
-                      startTime: startTime.date,
-                      endTime: endTime.date
-                    },
-                    this.props.units
-                  );
-                }}
+                reachedScrollStop={this.reachedScrollStop}
                 style={{
                   borderTopRightRadius: 10
                 }}

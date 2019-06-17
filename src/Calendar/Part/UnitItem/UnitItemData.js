@@ -36,6 +36,9 @@ class UnitItemData extends Component {
   constructor(props) {
     super(props);
     this.renderRow = this.renderRow.bind(this);
+    this.reachedScrollStop = this.reachedScrollStop.bind(this);
+    this.renderColWidth = this.renderColWidth.bind(this);
+    this.numsOfVisibleItems = 30;
   }
 
   componentDidMount() {
@@ -216,6 +219,20 @@ class UnitItemData extends Component {
     );
   }
 
+  renderColWidth({ index }) {
+    return 50;
+  }
+
+  async reachedScrollStop({ startIndex, endIndex }) {
+    const startTime = this.state.dates[startIndex];
+    const endTime = this.state.dates[endIndex];
+    await this.props.saveCurrentTimeStamp(startTime.date, endTime.date);
+    await this.props.fetchEventsData(
+      { startTime: startTime, endTime: endTime },
+      this.props.units
+    );
+  }
+
   render() {
     const {
       dates,
@@ -232,30 +249,11 @@ class UnitItemData extends Component {
           {dates.length > 0 ? (
             <ScrollSyncPane>
               <HorizontalVirtualize
-                colWidth={({ index }) => {
-                  // if (index % 2 === 0) {
-                  //   return 50;
-                  // }
-
-                  return 50;
-                }}
-                // viewPortHeight={200}
-                // viewPortWidth={400}
+                colWidth={this.renderColWidth}
                 dataLength={dates.length}
-                numsOfVisibleItems={30}
+                numsOfVisibleItems={this.numsOfVisibleItems}
                 renderRow={this.renderRow}
-                reachedScrollStop={async ({ startIndex, endIndex }) => {
-                  const startTime = this.state.dates[startIndex];
-                  const endTime = this.state.dates[endIndex];
-                  await this.props.saveCurrentTimeStamp(
-                    startDate.date,
-                    endDate.date
-                  );
-                  await this.props.fetchEventsData(
-                    { startTime: startTime, endTime: endTime },
-                    this.props.units
-                  );
-                }}
+                reachedScrollStop={this.reachedScrollStop}
               />
             </ScrollSyncPane>
           ) : null}

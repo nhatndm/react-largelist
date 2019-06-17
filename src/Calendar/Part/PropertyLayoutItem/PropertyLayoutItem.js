@@ -24,6 +24,8 @@ class PropertyLayoutItem extends Component {
     super(props);
     this.numsOfVisibleItems = 20;
     this.renderRow = this.renderRow.bind(this);
+    this.renderHeight = this.renderHeight.bind(this);
+    this.reachedScrollStop = this.reachedScrollStop.bind(this);
   }
 
   // shouldComponentUpdate(nextProps, nextState) {
@@ -49,6 +51,26 @@ class PropertyLayoutItem extends Component {
     );
   }
 
+  renderHeight({ index }) {
+    const data = this.props.data;
+    if (data[index].showPropertyName) {
+      return 48;
+    }
+
+    return 90;
+  }
+
+  async reachedScrollStop({ startIndex, endIndex }) {
+    const units = [];
+
+    for (let i = startIndex; i <= endIndex; i++) {
+      units.push(this.props.data[i].unitId);
+    }
+
+    await this.props.saveCurrentUnits(units);
+    await this.props.fetchEventsData(this.props.timeStamp, units);
+  }
+
   render() {
     const data = this.props.data;
     return (
@@ -56,32 +78,11 @@ class PropertyLayoutItem extends Component {
         <div className="property-layout-wrapper">
           {data.length > 0 ? (
             <VerticalVirtualize
-              rowHeight={({ index }) => {
-                // if (index % 2 === 0) {
-                //   return 50;
-                // }
-
-                if (data[index].showPropertyName) {
-                  return 48;
-                }
-
-                return 90;
-              }}
-              // viewPortHeight={400}
-              // viewPortWidth={500}
+              rowHeight={this.renderHeight}
               dataLength={data.length}
               numsOfVisibleItems={this.numsOfVisibleItems}
               renderRow={this.renderRow}
-              reachedScrollStop={async ({ startIndex, endIndex }) => {
-                const units = [];
-
-                for (let i = startIndex; i <= endIndex; i++) {
-                  units.push(this.props.data[i].unitId);
-                }
-
-                await this.props.saveCurrentUnits(units);
-                await this.props.fetchEventsData(this.props.timeStamp, units);
-              }}
+              reachedScrollStop={this.reachedScrollStop}
             />
           ) : null}
         </div>
