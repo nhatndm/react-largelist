@@ -7,13 +7,13 @@ export default class UnitItemTitle extends Component {
   }
 
   render() {
-    const { title, propertyItemName, dailytPrice } = this.props;
+    const { title, propertyItemName, dailytPrice, id } = this.props;
     return (
       <div className="col-3">
         <ActionIcon />
         <div className="unit-item-title">
           <p className="property-item-name">{propertyItemName}</p>
-          <p className="unit-name">Unit: {title}</p>
+          <p className="unit-name">Unit: {id}</p>
           <p className="unit-price">Daily: {dailytPrice}</p>
         </div>
       </div>

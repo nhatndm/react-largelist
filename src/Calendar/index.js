@@ -26,17 +26,21 @@ class Calendar extends Component {
     const data = await fetchPropertyData();
     const startTime = format(this.state.startDate, "YYYY-MM-DD");
     const endTime = format(addDays(this.state.startDate, 30), "YYYY-MM-DD");
-
+    const datesLength = getArrayDates(this.state.startDate, this.state.endDate)
+      .length;
     const units = [];
     for (let i = 0; i <= 10; i++) {
       units.push(data[i].unitId);
     }
+
     await this.props.savePropertyData(data);
     await this.props.saveCurrentUnits(units);
     await this.props.fetchEventsData(
       { startTime: startTime, endTime: endTime },
       units
     );
+    // 50 is the width of each element at timeline
+    await this.setState({ timeLineWidth: datesLength * 50 });
   }
 
   render() {

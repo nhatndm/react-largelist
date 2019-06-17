@@ -105,7 +105,7 @@ export const calculateWidthBetweenDateForEvent = (
     convertToIdDate(startDate, ViewMode)
   );
   const endDiv = document.getElementById(convertToIdDate(endDate, ViewMode));
-  const calendarWidth = parseInt(currentWidth.split("px")[0], 10);
+  const calendarWidth = currentWidth;
   if (startDiv && endDiv) {
     return {
       width: endDiv.offsetLeft - startDiv.offsetLeft,

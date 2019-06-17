@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { find, flatten, map } from "lodash";
+import { find, flatten, map, filter } from "lodash";
 import {
   getArrayDatesForEventsWithType,
   getArrayDatesForEvents
@@ -8,6 +8,7 @@ import ReactDOM from "react-dom";
 import AsyncComponent from "../../../AsyncComponent";
 import { type } from "./UnitItem";
 import { DateRangePicker } from "react-dates";
+import Event from "../../../Event";
 // import Radio from "component/Form/Radio";
 import moment from "moment";
 import { connect } from "react-redux";
@@ -37,23 +38,16 @@ class UnitItemData extends Component {
   }
 
   componentDidMount() {
-    const { timeLineWidth } = this.props;
     const dates = this.generateDates();
     this.setState({
       dates: dates,
-      timeLineWidth: timeLineWidth
+      timeLineWidth: 50 * 21
     });
   }
 
   componentWillReceiveProps(nextProps) {
     const events = nextProps.events;
     if (events) {
-      // const blockingEvents = filter(events, v => v.type === "blocking");
-      // const promotionEvents = filter(events, v => v.type === "promotion");
-      // const promotionAndReservationEvents = filter(
-      //   events,
-      //   v => v.type === "promotion_reservation"
-      // );
       const mappedArray = flatten(
         map(events, v =>
           getArrayDatesForEventsWithType(
@@ -79,8 +73,7 @@ class UnitItemData extends Component {
   }
 
   generateDates(events = []) {
-    const arrayObjectDates =
-      this.state.dates.length > 0 ? this.state.dates : this.originalDates();
+    const arrayObjectDates = this.originalDates();
     const eventsLength = events.length;
     if (eventsLength > 0) {
       for (let i = 0; i < eventsLength; i++) {
@@ -161,34 +154,40 @@ class UnitItemData extends Component {
   }
 
   // renderEventItem() {
-  //   const { sortedEventByStartDate } = this.state;
-  //   return sortedEventByStartDate.map((event, i) => {
-  //     if (event.refType === type.BLOCKING) {
+  //   const { events } = this.props;
+  //   const filterBlocking = filter(
+  //     events,
+  //     event =>
+  //       event.type === type.BLOCKING && event.unitId === this.props.unitId
+  //   );
+  //   if (filterBlocking.length > 0) {
+  //     return filterBlocking.map((event, i) => {
   //       return (
-  //         <EventCardBlock
-  //           top={`${event.top}px`}
+  //         <Event
+  //           top={25}
   //           startDate={new Date(event.startTime)}
   //           endDate={new Date(event.endTime)}
   //           currentWidth={this.state.timeLineWidth}
   //           content={`Blocking ${i + 1}`}
   //           event={event}
   //           key={i}
+  //           style={{ backgroundColor: "#424242" }}
   //         />
   //       );
-  //     }
 
-  //     return (
-  //       <EventCard
-  //         top={`${event.top}px`}
-  //         startDate={new Date(event.startTime)}
-  //         endDate={new Date(event.endTime)}
-  //         currentWidth={this.state.timeLineWidth}
-  //         content={`Reservation ${i + 1}`}
-  //         event={event}
-  //         key={i}
-  //       />
-  //     );
-  //   });
+  //       // return (
+  //       //   <Event
+  //       //     top={25}
+  //       //     startDate={new Date(event.startTime)}
+  //       //     endDate={new Date(event.endTime)}
+  //       //     currentWidth={this.state.timeLineWidth}
+  //       //     content={`Reservation ${i + 1}`}
+  //       //     event={event}
+  //       //     key={i}
+  //       //   />
+  //       // );
+  //     });
+  //   }
   // }
 
   renderRow({ index }) {

@@ -1,0 +1,142 @@
+.eventcard {
+  position: absolute;
+  margin-top: 3px;
+  width: 150px;
+  left: 50px;
+  height: 30px;
+  border: 2px solid #ffffff;
+  background-color: #ee911a;
+  border-radius: 15px;
+  padding-left: 5px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.calendar__overlay {
+  width: 100%;
+  background: linear-gradient(
+    -45deg,
+    rgba(131, 233, 196, 0.9),
+    rgba(76, 143, 168, 0.9),
+    rgba(3, 58, 72, 0.9)
+  );
+}
+
+.calendar__overlay > .calendar__drawer {
+  width: 700px;
+  transform: translate3d(0, 0, 0);
+}
+
+.eventcard:hover {
+  cursor: pointer;
+}
+
+.eventcard__content {
+  padding-left: 5px;
+}
+
+.calendar_drawer > p.card__title {
+  color: #242424;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+  letter-spacing: 0;
+  line-height: 24px;
+  margin: 0px;
+}
+
+.calendar_drawer_information_group {
+  display: flex;
+  margin: 16px 0px 0px 0px;
+}
+
+.calendar_drawer_information_group > .information_content {
+  display: flex;
+}
+
+.card.calendar_drawer {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  background: #fefeff;
+  padding: 16px 16px 0px 16px;
+  box-shadow: 0 0 10px 0 rgba(36, 36, 36, 0.1);
+  border-radius: 8px 8px 8px 8px;
+  margin-bottom: 20px;
+}
+
+.card.calendar_drawer:nth-child(3) {
+  padding-right: 0px;
+}
+
+.calendar_drawer_avatar_name_group {
+  display: flex;
+}
+
+.calendar_drawer_avatar_name_group > .profile_image > img {
+  width: 64px;
+  height: 64px;
+  margin: 0px 16px 0px 0px;
+}
+
+.calendar_drawer_avatar_name_group > .profile_content {
+  margin-top: 5px;
+}
+
+.information_group > p.title {
+  color: #8d8d8d;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  letter-spacing: 0.44px;
+  line-height: 14px;
+  margin: 0px;
+}
+
+.information_group > p.information {
+  height: 24px;
+  color: #242424;
+  font-size: 16px;
+  font-weight: normal;
+  text-align: left;
+  letter-spacing: 0;
+  line-height: 24px;
+  margin: 7px 0px 0px 0px;
+}
+
+.information_content > .information_group {
+  margin-right: 50px;
+  margin-bottom: 20px;
+}
+
+.calendar_drawer:nth-child(3)
+  > .calendar_drawer_information_group
+  > .information_content
+  > .information_group {
+  margin-right: 30px;
+  margin-bottom: 10px;
+}
+
+.profile_content > p.current_guest {
+  width: 98px;
+  color: #8d8d8d;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  letter-spacing: 0.44px;
+  line-height: 14px;
+  margin: 0px;
+}
+
+.profile_content > p.fullname {
+  width: 253px;
+  color: #242424;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 42px;
+  margin: 0;
+}
