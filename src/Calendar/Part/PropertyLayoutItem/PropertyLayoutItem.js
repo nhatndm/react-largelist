@@ -5,7 +5,7 @@ import UnitItem from "../UnitItem/UnitItem";
 import { connect } from "react-redux";
 // import { name, random } from "faker";
 import { VerticalVirtualize } from "../../../Virtualized";
-import { saveCurrentUnits } from "../../../action";
+import { saveCurrentUnits, fetchEventsData } from "../../../action";
 
 // const data = new Array(200).fill(null).map((v, i) => {
 //   return {
@@ -32,16 +32,6 @@ class PropertyLayoutItem extends Component {
   //     nextState.collapedLayout !== this.state.collapedLayout
   //   );
   // }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.data.length > 0) {
-      const units = [];
-      for (let i = 0; i <= this.numsOfVisibleItems; i++) {
-        units.push(nextProps.data[i].unitId);
-      }
-      this.props.saveCurrentUnits(units);
-    }
-  }
 
   renderRow({ index }) {
     const data = this.props.data;
@@ -82,20 +72,15 @@ class PropertyLayoutItem extends Component {
               dataLength={data.length}
               numsOfVisibleItems={this.numsOfVisibleItems}
               renderRow={this.renderRow}
-              reachedScrollStop={({ startIndex, endIndex }) => {
+              reachedScrollStop={async ({ startIndex, endIndex }) => {
                 const units = [];
 
                 for (let i = startIndex; i <= endIndex; i++) {
                   units.push(this.props.data[i].unitId);
                 }
 
-                console.log(
-                  `Will Call Api from ${this.props.timeStamp.startTime} to ${
-                    this.props.timeStamp.endTime
-                  } for units: `
-                );
-                console.log(units);
-                this.props.saveCurrentUnits(units);
+                await this.props.saveCurrentUnits(units);
+                await this.props.fetchEventsData(this.props.timeStamp, units);
               }}
             />
           ) : null}
@@ -123,7 +108,9 @@ const mapStateToProps = rootState => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    saveCurrentUnits: units => dispatch(saveCurrentUnits(units))
+    saveCurrentUnits: units => dispatch(saveCurrentUnits(units)),
+    fetchEventsData: (timeStamp, units) =>
+      dispatch(fetchEventsData(timeStamp, units))
   };
 };
 

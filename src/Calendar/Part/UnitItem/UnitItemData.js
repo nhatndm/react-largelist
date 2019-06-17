@@ -13,7 +13,7 @@ import moment from "moment";
 import { connect } from "react-redux";
 import { HorizontalVirtualize } from "../../../Virtualized";
 import { ScrollSyncPane } from "react-scroll-sync";
-import { saveCurrentTimeStamp } from "../../../action";
+import { saveCurrentTimeStamp, fetchEventsData } from "../../../action";
 
 let itemClick = {
   firstItem: {},
@@ -244,16 +244,17 @@ class UnitItemData extends Component {
                 dataLength={dates.length}
                 numsOfVisibleItems={30}
                 renderRow={this.renderRow}
-                reachedScrollStop={({ startIndex, endIndex }) => {
-                  const startDate = this.state.dates[startIndex];
-                  const endDate = this.state.dates[endIndex];
-                  console.log(
-                    `Will Call Api from ${startDate.date} to ${
-                      endDate.date
-                    } for units`
+                reachedScrollStop={async ({ startIndex, endIndex }) => {
+                  const startTime = this.state.dates[startIndex];
+                  const endTime = this.state.dates[endIndex];
+                  await this.props.saveCurrentTimeStamp(
+                    startDate.date,
+                    endDate.date
                   );
-                  console.log(this.props.units);
-                  this.props.saveCurrentTimeStamp(startDate.date, endDate.date);
+                  await this.props.fetchEventsData(
+                    { startTime: startTime, endTime: endTime },
+                    this.props.units
+                  );
                 }}
               />
             </ScrollSyncPane>
@@ -391,7 +392,9 @@ const mapStateToProps = rootState => {
 const mapDispatchToProps = dispatch => {
   return {
     saveCurrentTimeStamp: (startTime, endTime) =>
-      dispatch(saveCurrentTimeStamp(startTime, endTime))
+      dispatch(saveCurrentTimeStamp(startTime, endTime)),
+    fetchEventsData: (timeStamp, units) =>
+      dispatch(fetchEventsData(timeStamp, units))
   };
 };
 

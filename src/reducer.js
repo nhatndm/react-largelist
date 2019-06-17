@@ -1,7 +1,8 @@
 import {
   FETCH_PROPERTY_DATA,
   SAVE_CURRENT_TIMESTAMP,
-  SAVE_CURRENT_UNITS
+  SAVE_CURRENT_UNITS,
+  SAVE_EVENTS
 } from "./type";
 
 export const reducer = (
@@ -15,6 +16,7 @@ export const reducer = (
   switch (action.type) {
     case FETCH_PROPERTY_DATA:
       return {
+        ...state,
         data: action.data
       };
     case SAVE_CURRENT_TIMESTAMP:
@@ -29,6 +31,11 @@ export const reducer = (
       return {
         ...state,
         units: action.units
+      };
+    case SAVE_EVENTS:
+      return {
+        ...state,
+        events: action.data
       };
     default:
       return state;

@@ -44,8 +44,8 @@ export default class UnitItem extends Component {
             <UnitItemData
               startDate={startDate}
               endDate={endDate}
-              unitId={item.id}
-              propertyId={item.propertyId}
+              unitId={item.unitId}
+              propertyId={item.id}
               timeLineWidth={timeLineWidth}
               fetchEvents={() => fetchEvents()}
               preventReRenderingFilterBar={() =>

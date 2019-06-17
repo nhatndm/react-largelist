@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { ScrollSyncPane } from "react-scroll-sync";
 import { HorizontalVirtualize } from "../../../Virtualized";
 import { connect } from "react-redux";
-import { saveCurrentTimeStamp } from "../../../action";
+import { saveCurrentTimeStamp, fetchEventsData } from "../../../action";
 
 export default class TimelineCalendar extends Component {
   render() {
@@ -88,16 +88,21 @@ class TimeLineData extends Component {
                 dataLength={this.state.data.length}
                 numsOfVisibleItems={this.numsOfVisibleItems}
                 renderRow={this.renderRow}
-                reachedScrollStop={({ startIndex, endIndex }) => {
-                  const startDate = this.state.data[startIndex];
-                  const endDate = this.state.data[endIndex];
-                  console.log(
-                    `Will Call Api from ${startDate.date} to ${
-                      endDate.date
-                    } for units`
+                reachedScrollStop={async ({ startIndex, endIndex }) => {
+                  const startTime = this.state.data[startIndex];
+                  const endTime = this.state.data[endIndex];
+
+                  await this.props.saveCurrentTimeStamp(
+                    startTime.date,
+                    endTime.date
                   );
-                  console.log(this.props.units);
-                  this.props.saveCurrentTimeStamp(startDate.date, endDate.date);
+                  await this.props.fetchEventsData(
+                    {
+                      startTime: startTime.date,
+                      endTime: endTime.date
+                    },
+                    this.props.units
+                  );
                 }}
                 style={{
                   borderTopRightRadius: 10
@@ -149,7 +154,9 @@ const mapStateToProps = rootState => {
 const mapDispatchToProps = dispatch => {
   return {
     saveCurrentTimeStamp: (startTime, endTime) =>
-      dispatch(saveCurrentTimeStamp(startTime, endTime))
+      dispatch(saveCurrentTimeStamp(startTime, endTime)),
+    fetchEventsData: (timeStamp, units) =>
+      dispatch(fetchEventsData(timeStamp, units))
   };
 };
 
