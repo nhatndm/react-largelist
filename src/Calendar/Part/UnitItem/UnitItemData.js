@@ -38,7 +38,7 @@ class UnitItemData extends Component {
     this.renderRow = this.renderRow.bind(this);
     this.reachedScrollStop = this.reachedScrollStop.bind(this);
     this.renderColWidth = this.renderColWidth.bind(this);
-    this.numsOfVisibleItems = 30;
+    this.numsOfVisibleItems = 20;
   }
 
   componentDidMount() {
@@ -228,7 +228,7 @@ class UnitItemData extends Component {
     const endTime = this.state.dates[endIndex];
     await this.props.saveCurrentTimeStamp(startTime.date, endTime.date);
     await this.props.fetchEventsData(
-      { startTime: startTime, endTime: endTime },
+      { startTime: startTime.date, endTime: endTime.date },
       this.props.units
     );
   }

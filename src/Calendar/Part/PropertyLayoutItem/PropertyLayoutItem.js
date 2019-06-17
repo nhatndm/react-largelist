@@ -22,7 +22,7 @@ class PropertyLayoutItem extends Component {
 
   constructor(props) {
     super(props);
-    this.numsOfVisibleItems = 20;
+    this.numsOfVisibleItems = 10;
     this.renderRow = this.renderRow.bind(this);
     this.renderHeight = this.renderHeight.bind(this);
     this.reachedScrollStop = this.reachedScrollStop.bind(this);

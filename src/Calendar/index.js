@@ -28,7 +28,7 @@ class Calendar extends Component {
     const endTime = format(addDays(this.state.startDate, 30), "YYYY-MM-DD");
 
     const units = [];
-    for (let i = 0; i <= 20; i++) {
+    for (let i = 0; i <= 10; i++) {
       units.push(data[i].unitId);
     }
     await this.props.savePropertyData(data);
