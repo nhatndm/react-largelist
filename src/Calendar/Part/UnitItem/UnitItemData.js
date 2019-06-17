@@ -285,6 +285,8 @@ class UnitItemData extends Component {
             />
           );
         }
+
+        return null;
       });
     }
   }
