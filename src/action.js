@@ -53,20 +53,21 @@ export const fetchEventsData = (timeStamp, units) => {
   const array = [];
   const arrayType = [
     "reservation",
-    "block",
+    "blocking",
     "promotion",
     "promotion_reservation"
   ];
   for (let i = 0; i < unitsLength; i++) {
     const startTime = format(
       addDays(timeStamp.startTime, Math.floor(Math.random() * 10)),
-      "YYYY-MM-DD"
+      "YYYY-MM-DD 12:00:00"
     );
     const endTime = format(
       addDays(startTime, Math.floor(Math.random() * 100)),
-      "YYYY-MM-DD"
+      "YYYY-MM-DD 14:00:00"
     );
     array.push({
+      id: random.uuid(),
       startTime: startTime,
       endTime: endTime,
       unitId: units[i],

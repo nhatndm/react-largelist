@@ -291,10 +291,12 @@ export const getArrayDatesForEvents = function(
   });
 };
 
-export const getArrayDatesForBlockingEvent = function(
+export const getArrayDatesForEventsWithType = function(
   startDate,
   endDate,
   eventId,
+  type,
+  unitId,
   ViewMode = WEEKLY
 ) {
   const range = getArrayDatesBase(startDate, endDate);
@@ -303,7 +305,9 @@ export const getArrayDatesForBlockingEvent = function(
     return Array.from(range.by("days")).map(m => {
       return {
         id: format(m, "DDdMYYYY"),
-        eventId: eventId
+        eventId: eventId,
+        type: type,
+        unitId: unitId
       };
     });
   }
@@ -311,7 +315,9 @@ export const getArrayDatesForBlockingEvent = function(
   return Array.from(range.by("months")).map(m => {
     return {
       id: format(m, "MMYYYY"),
-      eventId: eventId
+      eventId: eventId,
+      type: type,
+      unitId: unitId
     };
   });
 };

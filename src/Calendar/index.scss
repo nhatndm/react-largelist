@@ -279,9 +279,13 @@ $heightCol: 90px;
               display: inline-block;
               height: $heightCol;
               border: 1px solid var(--color-mr-gray);
-              padding: 0px;
+              padding: 2px;
               width: $widthCol1;
               max-width: none;
+            }
+
+            .col-1.available {
+              border: 1px solid var(--color-mr-gray);
             }
 
             .col-1.blocking {
@@ -292,6 +296,15 @@ $heightCol: 90px;
                 #b8b8b8 10px,
                 #b8b8b8 12px
               ) !important;
+            }
+
+            .col-1.promotion {
+              background: linear-gradient(
+                -45deg,
+                rgb(111, 112, 235) 0%,
+                rgb(242, 92, 120) 55%,
+                rgb(253, 163, 87) 100%
+              );
             }
 
             .col-1.blocking.border__not__event:hover,

@@ -10,7 +10,9 @@ export const type = {
   UNBLOCK_ACTION: "Unblock",
   BLOCKING: "blocking",
   RESERVATION: "reservation",
-  AVAILABLE: "available"
+  AVAILABLE: "available",
+  PROMOTION: "promotion",
+  PROMOTION_RESERVATION: "promotion_reservation"
 };
 
 export default class UnitItem extends Component {

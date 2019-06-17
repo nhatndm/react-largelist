@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
-import { forEach } from "lodash";
+import { find, flatten, map } from "lodash";
 import {
-  getArrayDatesForBlockingEvent,
+  getArrayDatesForEventsWithType,
   getArrayDatesForEvents
 } from "../../date";
 import ReactDOM from "react-dom";
@@ -14,11 +14,6 @@ import { connect } from "react-redux";
 import { HorizontalVirtualize } from "../../../Virtualized";
 import { ScrollSyncPane } from "react-scroll-sync";
 import { saveCurrentTimeStamp, fetchEventsData } from "../../../action";
-
-let itemClick = {
-  firstItem: {},
-  secondItem: {}
-};
 
 class UnitItemData extends Component {
   state = {
@@ -51,12 +46,31 @@ class UnitItemData extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { timeLineWidth } = this.props;
-    const dates = this.generateDates();
-    this.setState({
-      dates: dates,
-      timeLineWidth: timeLineWidth
-    });
+    const events = nextProps.events;
+    if (events) {
+      // const blockingEvents = filter(events, v => v.type === "blocking");
+      // const promotionEvents = filter(events, v => v.type === "promotion");
+      // const promotionAndReservationEvents = filter(
+      //   events,
+      //   v => v.type === "promotion_reservation"
+      // );
+      const mappedArray = flatten(
+        map(events, v =>
+          getArrayDatesForEventsWithType(
+            moment(v.startTime),
+            moment(v.endTime),
+            v.id,
+            v.type,
+            v.unitId
+          )
+        )
+      );
+
+      const dates = this.generateDates(mappedArray);
+      this.setState({
+        dates: dates
+      });
+    }
   }
 
   originalDates() {
@@ -64,58 +78,27 @@ class UnitItemData extends Component {
     return getArrayDatesForEvents(startDate, endDate, propertyId, unitId);
   }
 
-  generateDates() {
-    const arrayObjectDates = this.originalDates();
-
+  generateDates(events = []) {
+    const arrayObjectDates =
+      this.state.dates.length > 0 ? this.state.dates : this.originalDates();
+    const eventsLength = events.length;
+    if (eventsLength > 0) {
+      for (let i = 0; i < eventsLength; i++) {
+        const event = events[i];
+        const foundObject = find(
+          arrayObjectDates,
+          value => value.id === event.id && value.unitId === event.unitId
+        );
+        if (foundObject) {
+          foundObject.type = event.type;
+          foundObject.eventId = event.eventId;
+        }
+      }
+    }
     return arrayObjectDates;
   }
 
-  handleChangeArrayDate() {
-    let time = {
-      startDate: itemClick.firstItem.date,
-      endDate: itemClick.secondItem.date
-    };
-
-    const dates = this.state.dates;
-
-    if (moment(time.startDate).isSameOrAfter(moment(time.endDate))) {
-      let tempVar;
-      tempVar = time.startDate;
-      time.startDate = time.endDate;
-      time.endDate = tempVar;
-    }
-
-    const mappedArrayToCallApi = getArrayDatesForBlockingEvent(
-      new Date(time.startDate),
-      new Date(time.endDate),
-      null
-    );
-
-    forEach(mappedArrayToCallApi, a => {
-      const foundObject = dates.find(value => value.id === a.id);
-      if (foundObject) {
-        foundObject.status = type.BLOCKING;
-      }
-    });
-
-    const DrawerAsync = AsyncComponent(() => import("../../../Drawer"));
-
-    this.setState({
-      dates: dates,
-      startDate: moment(time.startDate),
-      endDate: moment(time.endDate),
-      Drawer: DrawerAsync,
-      action: type.BLOCK_ACTION,
-      actionFromDrawer: type.BLOCK_ACTION
-    });
-  }
-
   resetState() {
-    itemClick = {
-      firstItem: {},
-      secondItem: {}
-    };
-
     return this.setState({
       startDate: "",
       endDate: "",
@@ -213,7 +196,7 @@ class UnitItemData extends Component {
       <UnitItemDataCol1
         item={this.state.dates[index]}
         key={index}
-        changeArrayDates={() => this.handleChangeArrayDate()}
+        // changeArrayDates={() => this.handleChangeArrayDate()}
         setArrayToUnblock={eventId => this.handleFindArrayToUnblock(eventId)}
       />
     );
@@ -332,30 +315,36 @@ class UnitItemData extends Component {
 
 class UnitItemDataCol1 extends Component {
   state = {
-    status: this.props.item.status
+    itemType: this.props.item.type
   };
 
   componentWillReceiveProps({ item }) {
-    if (item.status !== this.state.status) {
-      this.setState({ status: item.status });
+    if (item.type !== this.state.itemType) {
+      this.setState({ itemType: item.type });
     }
   }
 
-  shouldComponentUpdate({ item }, { status }) {
-    return (
-      item.status !== this.props.item.status ||
-      status !== this.state.status ||
-      item.id !== this.props.item.id
-    );
-  }
+  // shouldComponentUpdate({ item }, { status }) {
+  //   return (
+  //     item.status !== this.props.item.status ||
+  //     status !== this.state.status ||
+  //     item.id !== this.props.item.id
+  //   );
+  // }
 
   render() {
-    const { status } = this.state;
+    const { itemType } = this.state;
     // const { item } = this.props;
 
     return (
       <div
-        className={status === type.BLOCKING ? "col-1 blocking" : "col-1"}
+        className={
+          itemType === type.BLOCKING
+            ? "col-1 blocking"
+            : itemType === type.PROMOTION
+            ? "col-1 promotion"
+            : "col-1 available"
+        }
         onClick={() => {
           // Object.keys(itemClick.firstItem).length > 0
           //   ? (itemClick.secondItem = item)
@@ -376,14 +365,22 @@ class UnitItemDataCol1 extends Component {
           // return this.props.changeArrayDates();
           return;
         }}
-      />
+      >
+        {itemType === type.PROMOTION ||
+        itemType === type.PROMOTION_RESERVATION ? (
+          <div
+            style={{ backgroundColor: "white", width: "100%", height: "100%" }}
+          />
+        ) : null}
+      </div>
     );
   }
 }
 
 const mapStateToProps = rootState => {
   return {
-    units: rootState.units
+    units: rootState.units,
+    events: rootState.events
   };
 };
 
