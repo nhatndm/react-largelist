@@ -2,7 +2,8 @@ import React, { Component, Fragment } from "react";
 import { find, flatten, map, filter } from "lodash";
 import {
   getArrayDatesForEventsWithType,
-  getArrayDatesForEvents
+  getArrayDatesForEvents,
+  convertToIdDate
 } from "../../date";
 import ReactDOM from "react-dom";
 import AsyncComponent from "../../../AsyncComponent";
@@ -26,7 +27,8 @@ class UnitItemData extends Component {
     actionFromDrawer: "",
     eventId: "",
     timeLineWidth: "",
-    Drawer: null
+    Drawer: null,
+    eventsByUnitId: []
   };
 
   constructor(props) {
@@ -34,6 +36,8 @@ class UnitItemData extends Component {
     this.renderRow = this.renderRow.bind(this);
     this.reachedScrollStop = this.reachedScrollStop.bind(this);
     this.renderColWidth = this.renderColWidth.bind(this);
+    this.renderEvent = this.renderEvent.bind(this);
+    this.reachedScrollStart = this.reachedScrollStart.bind(this);
     this.numsOfVisibleItems = 20;
   }
 
@@ -48,8 +52,12 @@ class UnitItemData extends Component {
   componentWillReceiveProps(nextProps) {
     const events = nextProps.events;
     if (events) {
+      const eventsByUnitId = filter(
+        events,
+        v => v.unitId === this.props.unitId
+      );
       const mappedArray = flatten(
-        map(events, v =>
+        map(eventsByUnitId, v =>
           getArrayDatesForEventsWithType(
             moment(v.startTime),
             moment(v.endTime),
@@ -61,8 +69,10 @@ class UnitItemData extends Component {
       );
 
       const dates = this.generateDates(mappedArray);
+
       this.setState({
-        dates: dates
+        dates: dates,
+        eventsByUnitId: eventsByUnitId
       });
     }
   }
@@ -80,7 +90,7 @@ class UnitItemData extends Component {
         const event = events[i];
         const foundObject = find(
           arrayObjectDates,
-          value => value.id === event.id && value.unitId === event.unitId
+          value => value.id === event.id
         );
         if (foundObject) {
           foundObject.type = event.type;
@@ -153,43 +163,6 @@ class UnitItemData extends Component {
     });
   }
 
-  // renderEventItem() {
-  //   const { events } = this.props;
-  //   const filterBlocking = filter(
-  //     events,
-  //     event =>
-  //       event.type === type.BLOCKING && event.unitId === this.props.unitId
-  //   );
-  //   if (filterBlocking.length > 0) {
-  //     return filterBlocking.map((event, i) => {
-  //       return (
-  //         <Event
-  //           top={25}
-  //           startDate={new Date(event.startTime)}
-  //           endDate={new Date(event.endTime)}
-  //           currentWidth={this.state.timeLineWidth}
-  //           content={`Blocking ${i + 1}`}
-  //           event={event}
-  //           key={i}
-  //           style={{ backgroundColor: "#424242" }}
-  //         />
-  //       );
-
-  //       // return (
-  //       //   <Event
-  //       //     top={25}
-  //       //     startDate={new Date(event.startTime)}
-  //       //     endDate={new Date(event.endTime)}
-  //       //     currentWidth={this.state.timeLineWidth}
-  //       //     content={`Reservation ${i + 1}`}
-  //       //     event={event}
-  //       //     key={i}
-  //       //   />
-  //       // );
-  //     });
-  //   }
-  // }
-
   renderRow({ index }) {
     return (
       <UnitItemDataCol1
@@ -215,6 +188,107 @@ class UnitItemData extends Component {
     );
   }
 
+  async reachedScrollStart() {
+    await this.setState({ eventsByUnitId: [] });
+  }
+
+  calculateEventPosition(startLeftItem, endLeftItem, event) {
+    const startElement = document.getElementById(
+      convertToIdDate(event.startTime)
+    );
+    const endElement = document.getElementById(convertToIdDate(event.endTime));
+    if (startElement && endElement) {
+      return {
+        width:
+          parseInt(endElement.parentElement.style.left.split("px")[0], 10) -
+          parseInt(startElement.parentElement.style.left.split("px")[0], 10) +
+          50,
+        left: parseInt(
+          startElement.parentElement.style.left.split("px")[0],
+          10
+        ),
+        borderRadius: "15px"
+      };
+    }
+
+    if (startElement && !endElement) {
+      return {
+        width:
+          endLeftItem -
+          parseInt(startElement.parentElement.style.left.split("px")[0], 10) +
+          50,
+        left: parseInt(
+          startElement.parentElement.style.left.split("px")[0],
+          10
+        ),
+        borderRadius: "15px 0px 0px 15px"
+      };
+    }
+  }
+
+  renderEvent({ startLeftItem, endLeftItem }) {
+    const { eventsByUnitId } = this.state;
+    if (eventsByUnitId.length > 0) {
+      return eventsByUnitId.map((event, i) => {
+        const position = this.calculateEventPosition(
+          startLeftItem,
+          endLeftItem,
+          event
+        );
+        if (event.type === type.BLOCKING) {
+          return (
+            <Event
+              top={25}
+              startDate={new Date(event.startTime)}
+              endDate={new Date(event.endTime)}
+              left={position.left}
+              width={position.width}
+              borderRadius={position.borderRadius}
+              content={`B`}
+              event={event}
+              key={i}
+              style={{ backgroundColor: "#424242" }}
+            />
+          );
+        }
+
+        if (event.type === type.PROMOTION_RESERVATION) {
+          return (
+            <Event
+              top={25}
+              startDate={new Date(event.startTime)}
+              endDate={new Date(event.endTime)}
+              left={position.left}
+              width={position.width}
+              borderRadius={position.borderRadius}
+              content={`P&R`}
+              event={event}
+              key={i}
+              style={{ backgroundColor: "#ef4a81" }}
+            />
+          );
+        }
+
+        if (event.type === type.RESERVATION) {
+          return (
+            <Event
+              top={25}
+              startDate={new Date(event.startTime)}
+              endDate={new Date(event.endTime)}
+              left={position.left}
+              width={position.width}
+              borderRadius={position.borderRadius}
+              content={`R`}
+              event={event}
+              key={i}
+              style={{ backgroundColor: "#2bb6d6" }}
+            />
+          );
+        }
+      });
+    }
+  }
+
   render() {
     const {
       dates,
@@ -236,10 +310,11 @@ class UnitItemData extends Component {
                 numsOfVisibleItems={this.numsOfVisibleItems}
                 renderRow={this.renderRow}
                 reachedScrollStop={this.reachedScrollStop}
+                reachedScrollStart={this.reachedScrollStart}
+                renderEvent={this.renderEvent}
               />
             </ScrollSyncPane>
           ) : null}
-          {/* {this.renderEventItem()} */}
         </div>
         {Drawer && (
           <Drawer
@@ -340,7 +415,8 @@ class UnitItemDataCol1 extends Component {
         className={
           itemType === type.BLOCKING
             ? "col-1 blocking"
-            : itemType === type.PROMOTION
+            : itemType === type.PROMOTION ||
+              itemType === type.PROMOTION_RESERVATION
             ? "col-1 promotion"
             : "col-1 available"
         }

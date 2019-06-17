@@ -81,7 +81,7 @@ export default class HorizontalVirtualize extends Component {
     });
   }
 
-  scollPos() {
+  async scollPos() {
     const { dataLength, arrayLeft } = this.state;
 
     currentScrollLeft = this.viewPort.current.scrollLeft;
@@ -122,7 +122,11 @@ export default class HorizontalVirtualize extends Component {
         }
       }, 1000);
 
-      this.setState(
+      if (this.props.reachedScrollStart) {
+        await this.props.reachedScrollStart();
+      }
+
+      await this.setState(
         {
           start: currentIndx,
           end: end
@@ -157,8 +161,8 @@ export default class HorizontalVirtualize extends Component {
   }
 
   render() {
-    const { viewPortHeight, viewPortWidth, style } = this.props;
-    const { width } = this.state;
+    const { viewPortHeight, viewPortWidth, style, renderEvent } = this.props;
+    const { width, arrayLeft, end, start } = this.state;
 
     return (
       <div
@@ -173,6 +177,12 @@ export default class HorizontalVirtualize extends Component {
         }}
         onScroll={this.scollPos}
       >
+        {renderEvent
+          ? renderEvent({
+              endLeftItem: arrayLeft[end],
+              startLeftItem: arrayLeft[start]
+            })
+          : null}
         <div
           style={{
             width: width,
