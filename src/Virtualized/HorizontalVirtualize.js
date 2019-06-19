@@ -28,10 +28,12 @@ export default class HorizontalVirtualize extends Component {
       width: 100,
       dataLength: 0,
       arrayWidth: [],
-      arrayLeft: [0]
+      arrayLeft: [0],
+      showLoading: true
     };
     this._timeout = null;
     this.scollPos = this.scollPos.bind(this);
+    this._timeoutLoading = null;
   }
 
   componentDidMount() {
@@ -71,6 +73,12 @@ export default class HorizontalVirtualize extends Component {
       }
     });
 
+    if (this.props.calendarData) {
+      this._timeoutLoading = setTimeout(() => {
+        this.setState({ showLoading: false });
+      }, 1000);
+    }
+
     this.setState({
       width: lastTotalHeight,
       dataLength: dataLength,
@@ -79,6 +87,10 @@ export default class HorizontalVirtualize extends Component {
       start: currentIndx,
       end: end
     });
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this._timeoutLoading);
   }
 
   async scollPos() {
@@ -140,24 +152,60 @@ export default class HorizontalVirtualize extends Component {
 
   renderRows() {
     let result = [];
-    const { start, end, arrayLeft } = this.state;
-    const { colWidth, renderRow } = this.props;
-    for (let i = start; i <= end; i++) {
-      result.push(
+    const { start, end, arrayLeft, showLoading } = this.state;
+    const { colWidth, renderRow, startScrossing, calendarData } = this.props;
+
+    if (showLoading && calendarData) {
+      return (
         <div
-          key={i}
           style={{
-            width: colWidth({ index: i }),
             position: "absolute",
-            left: arrayLeft[i],
+            width: "100%",
             height: "100%"
           }}
         >
-          {renderRow({ index: i })}
+          <div className="text-line" />
+          <div className="text-line" />
+          <div className="text-line" />
+          <div className="text-line" />
         </div>
       );
     }
-    return result;
+
+    if ((!startScrossing && calendarData) || !calendarData) {
+      for (let i = start; i <= end; i++) {
+        result.push(
+          <div
+            key={i}
+            style={{
+              width: colWidth({ index: i }),
+              position: "absolute",
+              left: arrayLeft[i],
+              height: "100%"
+            }}
+          >
+            {renderRow({ index: i })}
+          </div>
+        );
+      }
+
+      return result;
+    }
+
+    return (
+      <div
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%"
+        }}
+      >
+        <div className="text-line" />
+        <div className="text-line" />
+        <div className="text-line" />
+        <div className="text-line" />
+      </div>
+    );
   }
 
   render() {

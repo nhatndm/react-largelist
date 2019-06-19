@@ -26,9 +26,9 @@ class UnitItemData extends Component {
     focusedInput: "",
     actionFromDrawer: "",
     eventId: "",
-    timeLineWidth: "",
     Drawer: null,
-    eventsByUnitId: []
+    eventsByUnitId: [],
+    startScrossing: false
   };
 
   constructor(props) {
@@ -38,14 +38,13 @@ class UnitItemData extends Component {
     this.renderColWidth = this.renderColWidth.bind(this);
     this.renderEvent = this.renderEvent.bind(this);
     this.reachedScrollStart = this.reachedScrollStart.bind(this);
-    this.numsOfVisibleItems = 20;
+    this.numsOfVisibleItems = 30;
   }
 
   componentDidMount() {
     const dates = this.generateDates();
     this.setState({
-      dates: dates,
-      timeLineWidth: 50 * 21
+      dates: dates
     });
   }
 
@@ -72,9 +71,14 @@ class UnitItemData extends Component {
 
       this.setState({
         dates: dates,
-        eventsByUnitId: eventsByUnitId
+        eventsByUnitId: eventsByUnitId,
+        startScrossing: false
       });
     }
+
+    this.setState({
+      startScrossing: false
+    });
   }
 
   originalDates() {
@@ -164,14 +168,19 @@ class UnitItemData extends Component {
   }
 
   renderRow({ index }) {
-    return (
-      <UnitItemDataCol1
-        item={this.state.dates[index]}
-        key={index}
-        // changeArrayDates={() => this.handleChangeArrayDate()}
-        setArrayToUnblock={eventId => this.handleFindArrayToUnblock(eventId)}
-      />
-    );
+    const { startScrossing } = this.state;
+    if (!startScrossing) {
+      return (
+        <UnitItemDataCol1
+          item={this.state.dates[index]}
+          key={index}
+          // changeArrayDates={() => this.handleChangeArrayDate()}
+          setArrayToUnblock={eventId => this.handleFindArrayToUnblock(eventId)}
+        />
+      );
+    }
+
+    return null;
   }
 
   renderColWidth({ index }) {
@@ -189,7 +198,7 @@ class UnitItemData extends Component {
   }
 
   async reachedScrollStart() {
-    await this.setState({ eventsByUnitId: [] });
+    await this.setState({ eventsByUnitId: [], startScrossing: true });
   }
 
   calculateEventPosition(startLeftItem, endLeftItem, event) {
@@ -227,8 +236,8 @@ class UnitItemData extends Component {
   }
 
   renderEvent({ startLeftItem, endLeftItem }) {
-    const { eventsByUnitId } = this.state;
-    if (eventsByUnitId.length > 0) {
+    const { eventsByUnitId, startScrossing } = this.state;
+    if (!startScrossing) {
       return eventsByUnitId.map((event, i) => {
         const position = this.calculateEventPosition(
           startLeftItem,
@@ -299,7 +308,8 @@ class UnitItemData extends Component {
       focusedInput,
       action,
       actionFromDrawer,
-      Drawer
+      Drawer,
+      startScrossing
     } = this.state;
     return (
       <Fragment>
@@ -314,6 +324,8 @@ class UnitItemData extends Component {
                 reachedScrollStop={this.reachedScrollStop}
                 reachedScrollStart={this.reachedScrollStart}
                 renderEvent={this.renderEvent}
+                startScrossing={startScrossing}
+                calendarData
               />
             </ScrollSyncPane>
           ) : null}

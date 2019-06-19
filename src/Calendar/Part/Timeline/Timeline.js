@@ -47,7 +47,7 @@ export default class TimelineCalendar extends Component {
 class TimeLineData extends Component {
   constructor(props) {
     super(props);
-    this.numsOfVisibleItems = 20;
+    this.numsOfVisibleItems = 30;
     this.state = {
       data: []
     };

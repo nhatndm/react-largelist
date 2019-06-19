@@ -22,6 +22,11 @@ class Calendar extends Component {
     timeLineWidth: ""
   };
 
+  constructor(props) {
+    super(props);
+    this._timeoutLoading = null;
+  }
+
   async componentDidMount() {
     const data = await fetchPropertyData();
     const startTime = format(this.state.startDate, "YYYY-MM-DD");
@@ -35,12 +40,20 @@ class Calendar extends Component {
 
     await this.props.savePropertyData(data);
     await this.props.saveCurrentUnits(units);
-    await this.props.fetchEventsData(
-      { startTime: startTime, endTime: endTime },
-      units
-    );
+
+    this._timeoutLoading = setTimeout(async () => {
+      await this.props.fetchEventsData(
+        { startTime: startTime, endTime: endTime },
+        units
+      );
+    }, 1000);
+
     // 50 is the width of each element at timeline
     await this.setState({ timeLineWidth: datesLength * 50 });
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this._timeoutLoading);
   }
 
   render() {

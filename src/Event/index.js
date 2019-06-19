@@ -16,7 +16,7 @@ class EventCard extends PureComponent {
   };
 
   render() {
-    const { top, style, left, width, borderRadius } = this.props;
+    const { top, style, left, width, borderRadius, event } = this.props;
     return (
       <div
         className="eventcard"
@@ -28,7 +28,7 @@ class EventCard extends PureComponent {
           ...style
         }}
         onClick={async () => {
-          await console.log("Will Fetch API Event Detail");
+          await console.log("Will Fetch API Event Detail for event: ", event);
         }}
       >
         <div className="eventcard__content">{this.props.content}</div>
