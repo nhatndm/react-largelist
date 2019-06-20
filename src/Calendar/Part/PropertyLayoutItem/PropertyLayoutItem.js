@@ -1,21 +1,11 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { ReactComponent as BuildingIcon } from "../../../assets/icons/building.svg";
-// import { ReactComponent as CollapedIcon } from "../../../assets/icons/arrow-twirl-up.svg";
 import UnitItem from "../UnitItem/UnitItem";
 import { connect } from "react-redux";
-// import { name, random } from "faker";
 import { VerticalVirtualize } from "../../../Virtualized";
 import { saveCurrentUnits, fetchEventsData } from "../../../action";
 
-// const data = new Array(200).fill(null).map((v, i) => {
-//   return {
-//     id: random.uuid(),
-//     name: name.title(),
-//     propertyId: random.uuid()
-//   };
-// });
-
-class PropertyLayoutItem extends Component {
+class PropertyLayoutItem extends PureComponent {
   state = {
     collapedLayout: false
   };
@@ -27,13 +17,6 @@ class PropertyLayoutItem extends Component {
     this.renderHeight = this.renderHeight.bind(this);
     this.reachedScrollStop = this.reachedScrollStop.bind(this);
   }
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return (
-  //     parseInt(nextProps.item.id, 10) !== parseInt(this.props.item.id, 10) ||
-  //     nextState.collapedLayout !== this.state.collapedLayout
-  //   );
-  // }
 
   renderRow({ index }) {
     const data = this.props.data;

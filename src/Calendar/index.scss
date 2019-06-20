@@ -311,6 +311,10 @@ $heightCol: 90px;
             .col-1.border__not__event:hover {
               border: 3px solid var(--color-mr-gray);
             }
+
+            ::-webkit-scrollbar {
+              display: none;
+            }
           }
         }
       }
@@ -344,7 +348,7 @@ $heightCol: 90px;
     }
   }
 
-  ::-webkit-scrollbar {
-    display: none;
-  }
+  // ::-webkit-scrollbar {
+  //   display: none;
+  // }
 }
