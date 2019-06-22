@@ -2,10 +2,16 @@ import React, { Component } from "react";
 import "./index.scss";
 import CalendarTable from "./calendar-table";
 import { connect } from "react-redux";
-import { addDays, subDays } from "date-fns";
+import { addDays, subDays, format } from "date-fns";
 import { CalendarContextProvider } from "./context";
 import { getArrayDates, convertToIdDate } from "./date";
 import { WEEKLY } from "./type";
+import {
+  fetchPropertyData,
+  savePropertyData,
+  saveCurrentUnits,
+  fetchEventsData
+} from "../action";
 
 class Calendar extends Component {
   state = {
@@ -15,6 +21,40 @@ class Calendar extends Component {
     viewMode: WEEKLY,
     timeLineWidth: ""
   };
+
+  constructor(props) {
+    super(props);
+    this._timeoutLoading = null;
+  }
+
+  async componentDidMount() {
+    const data = await fetchPropertyData();
+    const startTime = format(this.state.startDate, "YYYY-MM-DD");
+    const endTime = format(addDays(this.state.startDate, 30), "YYYY-MM-DD");
+    const datesLength = getArrayDates(this.state.startDate, this.state.endDate)
+      .length;
+    const units = [];
+    for (let i = 0; i <= 10; i++) {
+      units.push(data[i].unitId);
+    }
+
+    await this.props.savePropertyData(data);
+    await this.props.saveCurrentUnits(units);
+
+    this._timeoutLoading = setTimeout(async () => {
+      await this.props.fetchEventsData(
+        { startTime: startTime, endTime: endTime },
+        units
+      );
+    }, 1000);
+
+    // 50 is the width of each element at timeline
+    await this.setState({ timeLineWidth: datesLength * 50 });
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this._timeoutLoading);
+  }
 
   render() {
     return (
@@ -65,7 +105,16 @@ class Calendar extends Component {
   }
 }
 
+const mapDispatchToProps = dispatch => {
+  return {
+    savePropertyData: data => dispatch(savePropertyData(data)),
+    saveCurrentUnits: units => dispatch(saveCurrentUnits(units)),
+    fetchEventsData: (timeStamp, units) =>
+      dispatch(fetchEventsData(timeStamp, units))
+  };
+};
+
 export default connect(
   null,
-  null
+  mapDispatchToProps
 )(Calendar);

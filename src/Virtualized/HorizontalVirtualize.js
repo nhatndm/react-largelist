@@ -28,10 +28,12 @@ export default class HorizontalVirtualize extends Component {
       width: 100,
       dataLength: 0,
       arrayWidth: [],
-      arrayLeft: [0]
+      arrayLeft: [0],
+      showLoading: true
     };
     this._timeout = null;
     this.scollPos = this.scollPos.bind(this);
+    this._timeoutLoading = null;
   }
 
   componentDidMount() {
@@ -71,6 +73,12 @@ export default class HorizontalVirtualize extends Component {
       }
     });
 
+    if (this.props.calendarData) {
+      this._timeoutLoading = setTimeout(() => {
+        this.setState({ showLoading: false });
+      }, 1000);
+    }
+
     this.setState({
       width: lastTotalHeight,
       dataLength: dataLength,
@@ -81,7 +89,11 @@ export default class HorizontalVirtualize extends Component {
     });
   }
 
-  scollPos() {
+  componentWillUnmount() {
+    clearTimeout(this._timeoutLoading);
+  }
+
+  async scollPos() {
     const { dataLength, arrayLeft } = this.state;
 
     currentScrollLeft = this.viewPort.current.scrollLeft;
@@ -114,12 +126,19 @@ export default class HorizontalVirtualize extends Component {
           scrollStatus = false;
           clearTimeout(this._timeout);
           if (this.props.reachedScrollStop) {
-            this.props.reachedScrollStop();
+            this.props.reachedScrollStop({
+              startIndex: this.state.start,
+              endIndex: this.state.end
+            });
           }
         }
       }, 1000);
 
-      this.setState(
+      if (this.props.reachedScrollStart) {
+        await this.props.reachedScrollStart();
+      }
+
+      await this.setState(
         {
           start: currentIndx,
           end: end
@@ -133,29 +152,65 @@ export default class HorizontalVirtualize extends Component {
 
   renderRows() {
     let result = [];
-    const { start, end, arrayLeft } = this.state;
-    const { colWidth, renderRow } = this.props;
-    for (let i = start; i <= end; i++) {
-      result.push(
+    const { start, end, arrayLeft, showLoading } = this.state;
+    const { colWidth, renderRow, startScrossing, calendarData } = this.props;
+
+    if (showLoading && calendarData) {
+      return (
         <div
-          key={i}
           style={{
-            width: colWidth({ index: i }),
             position: "absolute",
-            left: arrayLeft[i],
+            width: "100%",
             height: "100%"
           }}
         >
-          {renderRow({ index: i })}
+          <div className="text-line" />
+          <div className="text-line" />
+          <div className="text-line" />
+          <div className="text-line" />
         </div>
       );
     }
-    return result;
+
+    if ((!startScrossing && calendarData) || !calendarData) {
+      for (let i = start; i <= end; i++) {
+        result.push(
+          <div
+            key={i}
+            style={{
+              width: colWidth({ index: i }),
+              position: "absolute",
+              left: arrayLeft[i],
+              height: "100%"
+            }}
+          >
+            {renderRow({ index: i })}
+          </div>
+        );
+      }
+
+      return result;
+    }
+
+    return (
+      <div
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%"
+        }}
+      >
+        <div className="text-line" />
+        <div className="text-line" />
+        <div className="text-line" />
+        <div className="text-line" />
+      </div>
+    );
   }
 
   render() {
-    const { viewPortHeight, viewPortWidth } = this.props;
-    const { width } = this.state;
+    const { viewPortHeight, viewPortWidth, style, renderEvent } = this.props;
+    const { width, arrayLeft, end, start } = this.state;
 
     return (
       <div
@@ -165,10 +220,17 @@ export default class HorizontalVirtualize extends Component {
           overflowY: "hidden",
           overflowX: "scroll",
           position: "relative",
-          width: viewPortWidth ? viewPortWidth : "100%"
+          width: viewPortWidth ? viewPortWidth : "100%",
+          ...style
         }}
         onScroll={this.scollPos}
       >
+        {renderEvent
+          ? renderEvent({
+              endLeftItem: arrayLeft[end],
+              startLeftItem: arrayLeft[start]
+            })
+          : null}
         <div
           style={{
             width: width,

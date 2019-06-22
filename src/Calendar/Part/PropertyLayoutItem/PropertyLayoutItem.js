@@ -1,37 +1,30 @@
-import React, { Component } from "react";
-// import { ReactComponent as ExpandIcon } from "../../../assets/icons/arrow-twirl-down.svg";
-// import { ReactComponent as CollapedIcon } from "../../../assets/icons/arrow-twirl-up.svg";
+import React, { PureComponent } from "react";
+import { ReactComponent as BuildingIcon } from "../../../assets/icons/building.svg";
 import UnitItem from "../UnitItem/UnitItem";
 import { connect } from "react-redux";
-import { name, random } from "faker";
 import { VerticalVirtualize } from "../../../Virtualized";
+import { saveCurrentUnits, fetchEventsData } from "../../../action";
 
-const data = new Array(200).fill(null).map((v, i) => {
-  return {
-    id: random.uuid(),
-    name: name.title(),
-    propertyId: random.uuid()
-  };
-});
-
-class PropertyLayoutItem extends Component {
+class PropertyLayoutItem extends PureComponent {
   state = {
     collapedLayout: false
   };
 
   constructor(props) {
     super(props);
+    this.numsOfVisibleItems = 10;
     this.renderRow = this.renderRow.bind(this);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      parseInt(nextProps.item.id, 10) !== parseInt(this.props.item.id, 10) ||
-      nextState.collapedLayout !== this.state.collapedLayout
-    );
+    this.renderHeight = this.renderHeight.bind(this);
+    this.reachedScrollStop = this.reachedScrollStop.bind(this);
   }
 
   renderRow({ index }) {
+    const data = this.props.data;
+    const item = data[index];
+    if (item.showPropertyName) {
+      return <PropertyLayoutItemTitle propertyName={item.propertyName} />;
+    }
+
     return (
       <UnitItem
         key={index}
@@ -41,42 +34,38 @@ class PropertyLayoutItem extends Component {
     );
   }
 
+  renderHeight({ index }) {
+    const data = this.props.data;
+    if (data[index].showPropertyName) {
+      return 48;
+    }
+
+    return 90;
+  }
+
+  async reachedScrollStop({ startIndex, endIndex }) {
+    const units = [];
+
+    for (let i = startIndex; i <= endIndex; i++) {
+      units.push(this.props.data[i].unitId);
+    }
+
+    await this.props.saveCurrentUnits(units);
+    await this.props.fetchEventsData(this.props.timeStamp, units);
+  }
+
   render() {
+    const data = this.props.data;
     return (
       <div className="property-layout-item">
         <div className="property-layout-wrapper">
-          <div className="scrollbar-right" />
-          {/* {new Array(5).fill(null).map((v, i) => {
-            const unit = {
-              id: random.uuid(),
-              name: name.title(),
-              propertyId: random.uuid()
-            };
-            return (
-              <UnitItem
-                key={i}
-                item={unit}
-                unitIDChanged={parseInt(this.props.unitIDChanged, 10)}
-              />
-            );
-          })} */}
           {data.length > 0 ? (
             <VerticalVirtualize
-              rowHeight={({ index }) => {
-                // if (index % 2 === 0) {
-                //   return 50;
-                // }
-
-                return 90;
-              }}
-              // viewPortHeight={400}
-              // viewPortWidth={500}
+              rowHeight={this.renderHeight}
               dataLength={data.length}
-              numsOfVisibleItems={10}
+              numsOfVisibleItems={this.numsOfVisibleItems}
               renderRow={this.renderRow}
-              reachedScrollStop={() =>
-                console.log("The verticall scroll is done, Will call api")
-              }
+              reachedScrollStop={this.reachedScrollStop}
             />
           ) : null}
         </div>
@@ -85,7 +74,31 @@ class PropertyLayoutItem extends Component {
   }
 }
 
+const PropertyLayoutItemTitle = props => {
+  return (
+    <div className="property-layout-item-title">
+      <BuildingIcon style={{ width: 24, height: 24 }} />
+      <p className="title">{props.propertyName}</p>
+    </div>
+  );
+};
+
+const mapStateToProps = rootState => {
+  return {
+    data: rootState.data,
+    timeStamp: rootState.timeStamp
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    saveCurrentUnits: units => dispatch(saveCurrentUnits(units)),
+    fetchEventsData: (timeStamp, units) =>
+      dispatch(fetchEventsData(timeStamp, units))
+  };
+};
+
 export default connect(
-  null,
-  null
+  mapStateToProps,
+  mapDispatchToProps
 )(PropertyLayoutItem);

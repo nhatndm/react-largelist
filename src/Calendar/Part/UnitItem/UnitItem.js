@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { CalendarContextCosumner } from "../../context";
 import UnitItemTitle from "../UnitItemTitle/UnitItemTitle";
-import UnitItemCol10 from "./UnitItemCol10";
+import UnitItemData from "./UnitItemData";
 import "./index.scss";
 
 export const type = {
@@ -10,7 +10,9 @@ export const type = {
   UNBLOCK_ACTION: "Unblock",
   BLOCKING: "blocking",
   RESERVATION: "reservation",
-  AVAILABLE: "available"
+  AVAILABLE: "available",
+  PROMOTION: "promotion",
+  PROMOTION_RESERVATION: "promotion_reservation"
 };
 
 export default class UnitItem extends Component {
@@ -36,14 +38,16 @@ export default class UnitItem extends Component {
         }) => (
           <div className="unit-item row">
             <UnitItemTitle
-              title={item.name ? item.name : `${item.id}`}
-              id={item.id}
+              title={item.unit}
+              id={item.unitId}
+              propertyItemName={item.propertyItemName}
+              dailytPrice={item.dailyPrice}
             />
-            <UnitItemCol10
+            <UnitItemData
               startDate={startDate}
               endDate={endDate}
-              unitId={item.id}
-              propertyId={item.propertyId}
+              unitId={item.unitId}
+              propertyId={item.id}
               timeLineWidth={timeLineWidth}
               fetchEvents={() => fetchEvents()}
               preventReRenderingFilterBar={() =>
