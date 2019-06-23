@@ -122,7 +122,7 @@ export default class MultiplyVirtualize extends Component {
       endY,
       isStartedScroll
     } = this.state;
-    const { onScrollStop, onScrollStart, showLoading } = this.props;
+    const { onScrollStop, onScrollStart } = this.props;
 
     scrollStatus = true;
 
