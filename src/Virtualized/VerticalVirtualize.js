@@ -45,9 +45,9 @@ export default class VerticalVirtualize extends Component {
       return total + num;
     });
 
-    let lastTotalHeight = last(arrayTop) + rowHeight({ index: dataLength - 1 });
+    let height = last(arrayTop) + rowHeight({ index: dataLength - 1 });
     this.setState({
-      height: lastTotalHeight,
+      height: height,
       dataLength: dataLength,
       arrayHeight: arrayHeight,
       arrayTop: arrayTop

@@ -3,6 +3,7 @@ import "./app.scss";
 import Calendar from "./Calendar";
 import "react-dates/initialize";
 import "react-dates/lib/css/_datepicker.css";
+import { MultiVirtualize } from "./Virtualized";
 
 class App extends Component {
   constructor(props) {
@@ -27,7 +28,21 @@ class App extends Component {
     return (
       <div className="container">
         <p> Metroresidences Calendar Improvement</p>
-        <Calendar />
+        {/* <Calendar /> */}
+        <MultiVirtualize
+          colHeight={() => 70}
+          colWidth={() => 50}
+          numbersOfCol={2000}
+          numbersOfRow={1000}
+          // viewPortHeight={200}
+          // viewPortWidth={500}
+          renderRow={() => <div />}
+          numsOfVisibleColItems={30}
+          numsOfVisibleRowItems={20}
+          onScrollStop={v => console.log(v)}
+          onScrollStart={v => console.log(v)}
+          showLoading
+        />
       </div>
     );
   }
