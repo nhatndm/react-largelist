@@ -46,6 +46,7 @@ export default class VerticalVirtualize extends Component {
     });
 
     let height = last(arrayTop) + rowHeight({ index: dataLength - 1 });
+
     this.setState({
       height: height,
       dataLength: dataLength,
@@ -54,8 +55,10 @@ export default class VerticalVirtualize extends Component {
     });
   }
 
-  scollPos() {
-    const { dataLength, arrayTop } = this.state;
+  async scollPos() {
+    const { dataLength, arrayTop, start, end } = this.state;
+    const { onScrollStop, onScrollStart } = this.props;
+
     let currentIndx = binarySearch(
       arrayTop,
       this.viewPort.current.scrollTop,
@@ -68,12 +71,12 @@ export default class VerticalVirtualize extends Component {
         ? currentIndx - this.numVisibleItems
         : currentIndx;
 
-    let end =
+    let endIndex =
       currentIndx + this.numVisibleItems >= dataLength
         ? dataLength - 1
         : currentIndx + this.numVisibleItems;
 
-    if (currentIndx !== this.state.start) {
+    if (currentIndx !== start) {
       if (this._timeout) {
         clearTimeout(this._timeout);
       }
@@ -83,73 +86,112 @@ export default class VerticalVirtualize extends Component {
           this._timeout = null;
           scrollStatus = false;
           clearTimeout(this._timeout);
-          if (this.props.reachedScrollStop) {
-            this.props.reachedScrollStop({
-              startIndex: this.state.start,
-              endIndex: this.state.end
+          if (onScrollStop) {
+            onScrollStop({
+              startIndex: start,
+              endIndex: end
             });
           }
         }
       }, 1000);
 
-      this.setState(
-        {
-          start: currentIndx,
-          end: end
-        },
-        () => {
-          scrollStatus = true;
-        }
-      );
+      if (!scrollStatus) {
+        await onScrollStart({
+          startIndex: start,
+          endIndex: end
+        });
+      }
+
+      this.setState({
+        start: currentIndx,
+        end: endIndex
+      });
+
+      scrollStatus = true;
     }
   }
 
   renderRows() {
     let result = [];
     const { start, end, arrayTop } = this.state;
-    const { rowHeight, renderRow } = this.props;
-    for (let i = start; i <= end; i++) {
-      result.push(
-        <div
-          key={i}
-          style={{
-            height: rowHeight({ index: i }),
-            position: "absolute",
-            top: arrayTop[i],
-            width: "100%"
-          }}
-        >
-          {renderRow({ index: i })}
-        </div>
-      );
+    const { rowHeight, renderRow, showLoading } = this.props;
+
+    if (!showLoading) {
+      for (let i = start; i <= end; i++) {
+        result.push(
+          <div
+            key={i}
+            style={{
+              height: rowHeight({ index: i }),
+              position: "absolute",
+              top: arrayTop[i],
+              width: "100%",
+              border: "1px solid #e6e6e6"
+            }}
+          >
+            {renderRow({ index: i })}
+          </div>
+        );
+      }
+
+      return result;
     }
-    return result;
+
+    return null;
   }
 
   render() {
-    const { viewPortHeight, viewPortWidth } = this.props;
+    const {
+      viewPortHeight,
+      viewPortWidth,
+      style,
+      showLoading,
+      customLoading
+    } = this.props;
     const { height } = this.state;
     return (
       <div
-        ref={this.viewPort}
         style={{
-          height: viewPortHeight ? viewPortHeight : "100vh",
-          overflowY: "scroll",
-          overflowX: "hidden",
-          position: "relative",
-          width: viewPortWidth ? viewPortWidth : "100%"
+          height: viewPortHeight,
+          width: viewPortWidth,
+          position: "relative"
         }}
-        onScroll={this.scollPos}
       >
         <div
+          ref={this.viewPort}
           style={{
-            height: height,
+            height: viewPortHeight ? viewPortHeight : "100vh",
+            overflowY: "scroll",
+            overflowX: "hidden",
             position: "relative",
-            width: "100%"
+            width: viewPortWidth ? viewPortWidth : "100%",
+            ...style
           }}
+          onScroll={this.scollPos}
         >
-          {this.renderRows()}
+          <div
+            style={{
+              height: height,
+              position: "relative",
+              width: "100%"
+            }}
+          >
+            {this.renderRows()}
+          </div>
         </div>
+        {showLoading ? (
+          <div className="animate_loading">
+            {customLoading ? (
+              customLoading()
+            ) : (
+              <div className="lds-roller">
+                {new Array(8).fill(null).map((v, i) => (
+                  <div key={i} />
+                ))}
+              </div>
+            )}
+          </div>
+        ) : null}
       </div>
     );
   }

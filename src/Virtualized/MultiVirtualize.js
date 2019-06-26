@@ -31,8 +31,7 @@ export default class MultiplyVirtualize extends Component {
       arrayWidth: [],
       arrayHeight: [],
       arrayLeft: [0],
-      arrayTop: [0],
-      isStartedScroll: false
+      arrayTop: [0]
     };
     this._timeout = null;
     this.scollPos = this.scollPos.bind(this);
@@ -119,12 +118,9 @@ export default class MultiplyVirtualize extends Component {
       startX,
       startY,
       endX,
-      endY,
-      isStartedScroll
+      endY
     } = this.state;
     const { onScrollStop, onScrollStart } = this.props;
-
-    scrollStatus = true;
 
     let scrollYValue = this.findScrollValue(
       this.viewPort.current.scrollTop,
@@ -156,12 +152,11 @@ export default class MultiplyVirtualize extends Component {
               startY: startY,
               endY: endY
             });
-            this.setState({ isStartedScroll: false });
           }
         }
       }, 1000);
 
-      if (onScrollStart && !isStartedScroll) {
+      if (!scrollStatus && onScrollStart) {
         await onScrollStart({
           startX: startX,
           endX: endX,
@@ -174,26 +169,19 @@ export default class MultiplyVirtualize extends Component {
         startX: scrollXValue.start,
         endX: scrollXValue.end,
         startY: scrollYValue.start,
-        endY: scrollYValue.end,
-        isStartedScroll: true
+        endY: scrollYValue.end
       });
+
+      scrollStatus = true;
     }
   }
 
   renderRows() {
     let result = [];
-    const {
-      startX,
-      endX,
-      startY,
-      endY,
-      arrayTop,
-      arrayLeft,
-      isStartedScroll
-    } = this.state;
+    const { startX, endX, startY, endY, arrayTop, arrayLeft } = this.state;
     const { colWidth, colHeight, renderRow, showLoading } = this.props;
 
-    if (!isStartedScroll || !showLoading) {
+    if (!showLoading) {
       for (let i = startY; i <= endY; i++) {
         for (let j = startX; j <= endX; j++) {
           result.push(
@@ -226,18 +214,16 @@ export default class MultiplyVirtualize extends Component {
       viewPortWidth,
       style,
       showLoading,
-      renderLoading
+      customLoading
     } = this.props;
-    const { width, height, isStartedScroll } = this.state;
-
-    viewPortHeight = viewPortHeight ? viewPortHeight : window.innerHeight - 150;
-    viewPortWidth = viewPortWidth ? viewPortWidth : "100%";
+    const { width, height } = this.state;
 
     return (
       <div
         style={{
           height: viewPortHeight,
-          width: viewPortWidth
+          width: viewPortWidth,
+          position: "relative"
         }}
       >
         <div
@@ -262,15 +248,17 @@ export default class MultiplyVirtualize extends Component {
           </div>
         </div>
 
-        {isStartedScroll && showLoading ? (
-          <div
-            style={{
-              position: "relative",
-              top: -viewPortHeight,
-              left: 0
-            }}
-          >
-            {renderLoading ? renderLoading() : "Loading...."}
+        {showLoading ? (
+          <div className="animate_loading">
+            {customLoading ? (
+              customLoading()
+            ) : (
+              <div className="lds-roller">
+                {new Array(8).fill(null).map((v, i) => (
+                  <div key={i} />
+                ))}
+              </div>
+            )}
           </div>
         ) : null}
       </div>

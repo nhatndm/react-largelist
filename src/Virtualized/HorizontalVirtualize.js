@@ -3,7 +3,6 @@ import React, { Component, createRef } from "react";
 import "./index.scss";
 import { last } from "lodash";
 
-let currentScrollLeft = 0;
 let scrollStatus = false;
 
 let binarySearch = function(arr, x, start, end) {
@@ -28,12 +27,11 @@ export default class HorizontalVirtualize extends Component {
       width: 100,
       dataLength: 0,
       arrayWidth: [],
-      arrayLeft: [0],
-      showLoading: true
+      arrayLeft: [0]
     };
     this._timeout = null;
     this.scollPos = this.scollPos.bind(this);
-    this._timeoutLoading = null;
+    this.renderRows = this.renderRows.bind(this);
   }
 
   componentDidMount() {
@@ -48,55 +46,19 @@ export default class HorizontalVirtualize extends Component {
       return total + num;
     });
 
-    let currentIndx = binarySearch(
-      arrayLeft,
-      currentScrollLeft,
-      0,
-      arrayLeft.length - 1
-    );
-
-    currentIndx =
-      currentIndx - this.numVisibleItems >= dataLength
-        ? currentIndx - this.numVisibleItems
-        : currentIndx;
-
-    let end =
-      currentIndx + this.numVisibleItems >= dataLength
-        ? dataLength - 1
-        : currentIndx + this.numVisibleItems;
-
-    let lastTotalHeight = last(arrayLeft) + colWidth({ index: dataLength - 1 });
-
-    setTimeout(() => {
-      if (this.viewPort.current) {
-        this.viewPort.current.scrollLeft = currentScrollLeft;
-      }
-    });
-
-    if (this.props.calendarData) {
-      this._timeoutLoading = setTimeout(() => {
-        this.setState({ showLoading: false });
-      }, 1000);
-    }
+    let lastTotalWidth = last(arrayLeft) + colWidth({ index: dataLength - 1 });
 
     this.setState({
-      width: lastTotalHeight,
+      width: lastTotalWidth,
       dataLength: dataLength,
       arrayLeft: arrayLeft,
-      arrayWidth: arrayWidth,
-      start: currentIndx,
-      end: end
+      arrayWidth: arrayWidth
     });
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this._timeoutLoading);
   }
 
   async scollPos() {
-    const { dataLength, arrayLeft } = this.state;
-
-    currentScrollLeft = this.viewPort.current.scrollLeft;
+    const { dataLength, arrayLeft, start, end } = this.state;
+    const { onScrollStop, onScrollStart } = this.props;
 
     let currentIndx = binarySearch(
       arrayLeft,
@@ -110,69 +72,52 @@ export default class HorizontalVirtualize extends Component {
         ? currentIndx - this.numVisibleItems
         : currentIndx;
 
-    let end =
+    let endIndex =
       currentIndx + this.numVisibleItems >= dataLength
         ? dataLength - 1
         : currentIndx + this.numVisibleItems;
 
-    if (currentIndx !== this.state.start) {
+    if (currentIndx !== start) {
       if (this._timeout) {
         clearTimeout(this._timeout);
       }
 
-      this._timeout = setTimeout(() => {
+      this._timeout = setTimeout(async () => {
         if (scrollStatus) {
           this._timeout = null;
           scrollStatus = false;
           clearTimeout(this._timeout);
-          if (this.props.reachedScrollStop) {
-            this.props.reachedScrollStop({
-              startIndex: this.state.start,
-              endIndex: this.state.end
+          if (onScrollStop) {
+            await onScrollStop({
+              startIndex: start,
+              endIndex: end
             });
           }
         }
       }, 1000);
 
-      if (this.props.reachedScrollStart) {
-        await this.props.reachedScrollStart();
+      if (!scrollStatus && onScrollStart) {
+        await onScrollStart({
+          startIndex: start,
+          endIndex: end
+        });
       }
 
-      await this.setState(
-        {
-          start: currentIndx,
-          end: end
-        },
-        () => {
-          scrollStatus = true;
-        }
-      );
+      await this.setState({
+        start: currentIndx,
+        end: endIndex
+      });
+
+      scrollStatus = true;
     }
   }
 
   renderRows() {
     let result = [];
-    const { start, end, arrayLeft, showLoading } = this.state;
-    const { colWidth, renderRow, startScrossing, calendarData } = this.props;
+    const { start, end, arrayLeft } = this.state;
+    const { colWidth, renderRow, showLoading } = this.props;
 
-    if (showLoading && calendarData) {
-      return (
-        <div
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%"
-          }}
-        >
-          <div className="text-line" />
-          <div className="text-line" />
-          <div className="text-line" />
-          <div className="text-line" />
-        </div>
-      );
-    }
-
-    if ((!startScrossing && calendarData) || !calendarData) {
+    if (!showLoading) {
       for (let i = start; i <= end; i++) {
         result.push(
           <div
@@ -181,7 +126,8 @@ export default class HorizontalVirtualize extends Component {
               width: colWidth({ index: i }),
               position: "absolute",
               left: arrayLeft[i],
-              height: "100%"
+              height: "100%",
+              border: "1px solid #e6e6e6"
             }}
           >
             {renderRow({ index: i })}
@@ -192,54 +138,61 @@ export default class HorizontalVirtualize extends Component {
       return result;
     }
 
-    return (
-      <div
-        style={{
-          position: "absolute",
-          width: "100%",
-          height: "100%"
-        }}
-      >
-        <div className="text-line" />
-        <div className="text-line" />
-        <div className="text-line" />
-        <div className="text-line" />
-      </div>
-    );
+    return null;
   }
 
   render() {
-    const { viewPortHeight, viewPortWidth, style, renderEvent } = this.props;
-    const { width, arrayLeft, end, start } = this.state;
-
+    const {
+      viewPortHeight,
+      viewPortWidth,
+      style,
+      showLoading,
+      customLoading
+    } = this.props;
+    const { width } = this.state;
     return (
       <div
-        ref={this.viewPort}
         style={{
-          height: viewPortHeight ? viewPortHeight : "100%",
-          overflowY: "hidden",
-          overflowX: "scroll",
-          position: "relative",
-          width: viewPortWidth ? viewPortWidth : "100%",
-          ...style
+          height: viewPortHeight,
+          width: viewPortWidth,
+          position: "relative"
         }}
-        onScroll={this.scollPos}
       >
-        {renderEvent
-          ? renderEvent({
-              endLeftItem: arrayLeft[end],
-              startLeftItem: arrayLeft[start]
-            })
-          : null}
         <div
+          ref={this.viewPort}
           style={{
-            width: width,
+            height: viewPortHeight ? viewPortHeight : "100%",
+            overflowY: "hidden",
+            overflowX: "scroll",
             position: "relative",
-            height: "100%"
+            width: viewPortWidth ? viewPortWidth : "100%",
+            ...style
           }}
+          onScroll={this.scollPos}
         >
-          {this.renderRows()}
+          <div
+            style={{
+              width: width,
+              position: "relative",
+              height: "100%"
+            }}
+          >
+            {this.renderRows()}
+          </div>
         </div>
+        {showLoading ? (
+          <div className="animate_loading">
+            {customLoading ? (
+              customLoading()
+            ) : (
+              <div className="lds-roller">
+                {new Array(8).fill(null).map((v, i) => (
+                  <div key={i} />
+                ))}
+              </div>
+            )}
+          </div>
+        ) : null}
       </div>
     );
   }
