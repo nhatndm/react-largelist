@@ -2,19 +2,9 @@
 import React, { Component, createRef } from "react";
 import "./index.scss";
 import { last } from "lodash";
+import { findScrollValue } from "../helper/dom";
 
 let scrollStatus = false;
-
-let binarySearch = function(arr, x, start, end) {
-  if (start > end) return false;
-
-  let mid = Math.floor((start + end) / 2);
-
-  if (arr[mid] <= x && x < arr[mid + 1]) return mid;
-
-  if (arr[mid] > x) return binarySearch(arr, x, start, mid - 1);
-  else return binarySearch(arr, x, mid + 1, end);
-};
 
 export default class HorizontalVirtualize extends Component {
   constructor(props) {
@@ -60,24 +50,14 @@ export default class HorizontalVirtualize extends Component {
     const { dataLength, arrayLeft, start, end } = this.state;
     const { onScrollStop, onScrollStart } = this.props;
 
-    let currentIndx = binarySearch(
-      arrayLeft,
+    let scrollValue = findScrollValue(
       this.viewPort.current.scrollLeft,
-      0,
-      arrayLeft.length - 1
+      this.numVisibleItems,
+      dataLength,
+      arrayLeft
     );
 
-    currentIndx =
-      currentIndx - this.numVisibleItems >= dataLength
-        ? currentIndx - this.numVisibleItems
-        : currentIndx;
-
-    let endIndex =
-      currentIndx + this.numVisibleItems >= dataLength
-        ? dataLength - 1
-        : currentIndx + this.numVisibleItems;
-
-    if (currentIndx !== start) {
+    if (scrollValue.start !== start) {
       if (this._timeout) {
         clearTimeout(this._timeout);
       }
@@ -104,8 +84,8 @@ export default class HorizontalVirtualize extends Component {
       }
 
       await this.setState({
-        start: currentIndx,
-        end: endIndex
+        start: scrollValue.start,
+        end: scrollValue.end
       });
 
       scrollStatus = true;

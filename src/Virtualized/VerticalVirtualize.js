@@ -1,20 +1,10 @@
 /* eslint-disable no-useless-constructor */
 import React, { Component, createRef } from "react";
 import "./index.scss";
+import { findScrollValue } from "../helper/dom";
 import { last } from "lodash";
 
 let scrollStatus = false;
-
-let binarySearch = function(arr, x, start, end) {
-  if (start > end) return false;
-
-  let mid = Math.floor((start + end) / 2);
-
-  if (arr[mid] <= x && x < arr[mid + 1]) return mid;
-
-  if (arr[mid] > x) return binarySearch(arr, x, start, mid - 1);
-  else return binarySearch(arr, x, mid + 1, end);
-};
 
 export default class VerticalVirtualize extends Component {
   constructor(props) {
@@ -59,24 +49,14 @@ export default class VerticalVirtualize extends Component {
     const { dataLength, arrayTop, start, end } = this.state;
     const { onScrollStop, onScrollStart } = this.props;
 
-    let currentIndx = binarySearch(
-      arrayTop,
+    let scrollValue = findScrollValue(
       this.viewPort.current.scrollTop,
-      0,
-      arrayTop.length - 1
+      this.numVisibleItems,
+      dataLength,
+      arrayTop
     );
 
-    currentIndx =
-      currentIndx - this.numVisibleItems >= dataLength
-        ? currentIndx - this.numVisibleItems
-        : currentIndx;
-
-    let endIndex =
-      currentIndx + this.numVisibleItems >= dataLength
-        ? dataLength - 1
-        : currentIndx + this.numVisibleItems;
-
-    if (currentIndx !== start) {
+    if (scrollValue.start !== start) {
       if (this._timeout) {
         clearTimeout(this._timeout);
       }
@@ -103,8 +83,8 @@ export default class VerticalVirtualize extends Component {
       }
 
       this.setState({
-        start: currentIndx,
-        end: endIndex
+        start: scrollValue.start,
+        end: scrollValue.end
       });
 
       scrollStatus = true;

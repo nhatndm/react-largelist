@@ -46,11 +46,11 @@ class App extends Component {
           renderRow={() => <div />}
           numsOfVisibleColItems={30}
           numsOfVisibleRowItems={20}
-          onScrollStart={() => this.setState({ fakeAPICall: true })}
-          onScrollStop={() =>
-            setTimeout(() => this.setState({ fakeAPICall: false }), 5000)
-          }
-          showLoading={this.state.fakeAPICall}
+          // onScrollStart={() => this.setState({ fakeAPICall: true })}
+          // onScrollStop={() =>
+          //   setTimeout(() => this.setState({ fakeAPICall: false }), 5000)
+          // }
+          // showLoading={this.state.fakeAPICall}
         />
         {/* <HorizontalVirtualize
           colWidth={() => 50}

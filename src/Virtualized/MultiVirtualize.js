@@ -1,18 +1,9 @@
 import React, { Component, createRef } from "react";
 import { last } from "lodash";
+import { findScrollValue } from "../helper/dom";
 
 let scrollStatus = false;
 
-let binarySearch = function(arr, x, start, end) {
-  if (start > end) return false;
-
-  let mid = Math.floor((start + end) / 2);
-
-  if (arr[mid] <= x && x < arr[mid + 1]) return mid;
-
-  if (arr[mid] > x) return binarySearch(arr, x, start, mid - 1);
-  else return binarySearch(arr, x, mid + 1, end);
-};
 export default class MultiplyVirtualize extends Component {
   constructor(props) {
     super(props);
@@ -85,30 +76,6 @@ export default class MultiplyVirtualize extends Component {
     clearTimeout(this._timeoutLoading);
   }
 
-  findScrollValue(scrollValue, numberOfVisibleItem, dataLength, arrayValueDim) {
-    let currentIndex = binarySearch(
-      arrayValueDim,
-      scrollValue,
-      0,
-      arrayValueDim.length - 1
-    );
-
-    currentIndex =
-      currentIndex - numberOfVisibleItem >= dataLength
-        ? currentIndex - numberOfVisibleItem
-        : currentIndex;
-
-    let end =
-      currentIndex + numberOfVisibleItem >= dataLength
-        ? dataLength - 1
-        : currentIndex + numberOfVisibleItem;
-
-    return {
-      start: currentIndex,
-      end: end
-    };
-  }
-
   async scollPos() {
     const {
       numbersOfCol,
@@ -122,13 +89,13 @@ export default class MultiplyVirtualize extends Component {
     } = this.state;
     const { onScrollStop, onScrollStart } = this.props;
 
-    let scrollYValue = this.findScrollValue(
+    let scrollYValue = findScrollValue(
       this.viewPort.current.scrollTop,
       this.numVisibleItemsY,
       numbersOfRow,
       arrayTop
     );
-    let scrollXValue = this.findScrollValue(
+    let scrollXValue = findScrollValue(
       this.viewPort.current.scrollLeft,
       this.numVisibleItemsX,
       numbersOfCol,
