@@ -51,9 +51,10 @@
     "react-dom": "^16.8.5"
   },
   "devDependencies": {
-    "react": "^16.8.5",
+    "@babel/cli": "^7.4.4",
     "babel-cli": "^6.26.0",
-    "react-scripts": "2.1.8",
-    "react-dom": "^16.8.5"
+    "react": "^16.8.5",
+    "react-dom": "^16.8.5",
+    "react-scripts": "2.1.8"
   }
 }
