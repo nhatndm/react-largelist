@@ -12,7 +12,7 @@ import _assertThisInitialized from "@babel/runtime/helpers/esm/assertThisInitial
 import React, { Component, createRef } from "react";
 import "./index.scss";
 import { last } from "lodash";
-import { findScrollValue } from "../helper/dom";
+import { findScrollValue } from "./helper/dom";
 var scrollStatus = false;
 
 var HorizontalVirtualize =

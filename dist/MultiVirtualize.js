@@ -9,7 +9,7 @@ import _inherits from "@babel/runtime/helpers/esm/inherits";
 import _assertThisInitialized from "@babel/runtime/helpers/esm/assertThisInitialized";
 import React, { Component, createRef } from "react";
 import { last } from "lodash";
-import { findScrollValue } from "../helper/dom";
+import { findScrollValue } from "./helper/dom";
 var scrollStatus = false;
 
 var MultiplyVirtualize =

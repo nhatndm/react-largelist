@@ -11,7 +11,7 @@ import _assertThisInitialized from "@babel/runtime/helpers/esm/assertThisInitial
 /* eslint-disable no-useless-constructor */
 import React, { Component, createRef } from "react";
 import "./index.scss";
-import { findScrollValue } from "../helper/dom";
+import { findScrollValue } from "./helper/dom";
 import { last } from "lodash";
 var scrollStatus = false;
 
