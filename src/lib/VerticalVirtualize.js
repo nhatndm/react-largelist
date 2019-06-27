@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-constructor */
 import React, { Component, createRef } from "react";
 import "./index.scss";
-import { findScrollValue } from "../helper/dom";
+import { findScrollValue } from "./helper/dom";
 import { last } from "lodash";
 
 let scrollStatus = false;

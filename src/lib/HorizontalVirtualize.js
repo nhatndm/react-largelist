@@ -2,7 +2,7 @@
 import React, { Component, createRef } from "react";
 import "./index.scss";
 import { last } from "lodash";
-import { findScrollValue } from "../helper/dom";
+import { findScrollValue } from "./helper/dom"
 
 let scrollStatus = false;
 
